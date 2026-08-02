@@ -1,7 +1,6 @@
 -- =======================================================
--- [[ HUMBLE LIB (UNIVERSAL UI) ]]
+-- [[ HUMBLE SCRIPTZ V4 - ALL IN ONE FOR DELTA ]]
 -- =======================================================
-local HumbleLib = {}
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -30,6 +29,8 @@ local Theme = {
     ToggleOff     = Color3.fromRGB(30, 33, 45),
     ToggleOn      = Color3.fromRGB(124, 58, 237)
 }
+
+local HumbleLib = {}
 
 local NotifyContainer = Instance.new("Frame")
 NotifyContainer.Name = "NotifyContainer"
@@ -645,4 +646,200 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     return Window
 end
 
-return HumbleLib
+-- =======================================================
+-- [[ GAME CONTROLS & SETUP ]]
+-- =======================================================
+
+local Window = HumbleLib:CreateWindow("HUMBLE", "SCRIPTZ V4")
+
+HumbleLib:Notify("Humble Scriptz", "Loaded successfully!", 3)
+
+local MainTab = Window:CreateTab("Main")
+local TeleportTab = Window:CreateTab("Teleport")
+
+local worldMaxLanes = {
+    ["World 1"] = 25,
+    ["World 2"] = 20,
+    ["World 3"] = 0
+}
+
+local worldCFrames = {
+    ["World 1"] = {
+        [1]  = CFrame.new(1849.6803, 12.7774658, 2747.24878, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [2]  = CFrame.new(1851.6803, 12.7774658, 2628.39282, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [3]  = CFrame.new(1853.6803, 12.7774658, 2496.31396, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [4]  = CFrame.new(1853.01379, 12.7774658, 2363.08057, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [5]  = CFrame.new(1854.01379, 12.7774658, 2228.63745, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [6]  = CFrame.new(1851.6803, 12.7774658, 2085.93359, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [7]  = CFrame.new(1853.01379, 12.7774658, 1911.14661, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [8]  = CFrame.new(1851.6803, 12.7774658, 1729.71204, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [9]  = CFrame.new(1852.68005, 12.7774658, 1547.27722, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [10] = CFrame.new(1852.68005, 12.7774658, 1364.29785, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [11] = CFrame.new(1853.6803, 12.7774658, 1182.39795, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [12] = CFrame.new(1853.6803, 12.7774658, 985.234375, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [13] = CFrame.new(1856.34729, 12.9774485, 790.133057, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [14] = CFrame.new(1856.34729, 12.9774485, 593.019531, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [15] = CFrame.new(1855.34705, 12.9774485, 397.684082, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [16] = CFrame.new(1855.34705, 12.9774485, 200.570801, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [17] = CFrame.new(1857.34705, 12.9774485, 1.45727503, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [18] = CFrame.new(1855.34705, 13.2774658, -193.656738, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [19] = CFrame.new(1856.34644, 13.2774343, -392.223877, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [20] = CFrame.new(1856.34644, 13.2774343, -587.223877, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [21] = CFrame.new(1856.34644, 13.2774343, -784.223877, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [22] = CFrame.new(1856.34644, 13.2774343, -981.223877, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [23] = CFrame.new(1856.34644, 13.2774343, -1178.224, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [24] = CFrame.new(1856.34644, 13.2774343, -1376.22461, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [25] = CFrame.new(1856.34644, 13.344101, -1541.22461, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+    },
+    ["World 2"] = {
+        [1]  = CFrame.new(1856.01355, 13.0774527, 2712.18579, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [2]  = CFrame.new(1856.01367, 13.0774517, 2525.25146, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [3]  = CFrame.new(1857.01367, 13.0774517, 2334.97705, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [4]  = CFrame.new(1855.01367, 13.0774517, 2146.97705, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [5]  = CFrame.new(1857.01367, 13.0774517, 1960.97693, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [19] = CFrame.new(1857.34705, 13.2774563, -676.827759, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [20] = CFrame.new(1856.01367, 13.1441221, -823.943848, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+    },
+    ["World 3"] = {}
+}
+
+local w2_startZ = 1960.97693
+local w2_endZ = -676.827759
+local w2_stepZ = (w2_endZ - w2_startZ) / (19 - 5)
+
+for i = 6, 18 do
+    worldCFrames["World 2"][i] = CFrame.new(1856.01367, 13.0774517, w2_startZ + ((i - 5) * w2_stepZ), -1, 0, 0, 0, 1, 0, 0, 0, -1)
+end
+
+local selectedWorld = "World 1"
+local selectedLaneIndex = 1
+local loopTeleport = false
+local loopWait = 1
+
+local initialLaneOptions = {}
+for i = 1, worldMaxLanes["World 1"] do 
+    table.insert(initialLaneOptions, "Lane" .. i) 
+end
+
+local laneDropdown = TeleportTab:CreateDropdown("Select Win Lane", initialLaneOptions, "Lane1", function(selected)
+    local laneNum = tonumber(selected:match("%d+")) or 1
+    local maxLanes = worldMaxLanes[selectedWorld] or 25
+    
+    if maxLanes > 0 and laneNum > maxLanes then
+        selectedLaneIndex = maxLanes
+        HumbleLib:Notify("Action Blocked", selectedWorld .. " maximum is Lane " .. maxLanes .. "!", 3)
+        return
+    end
+
+    selectedLaneIndex = laneNum
+    HumbleLib:Notify("Target Set", selectedWorld .. " - Lane " .. selectedLaneIndex, 1.5)
+end)
+
+TeleportTab:CreateDropdown("Select World", {"World 1", "World 2", "World 3"}, "World 1", function(selected)
+    selectedWorld = selected
+    local maxLanes = worldMaxLanes[selected] or 25
+    if maxLanes == 0 then maxLanes = 25 end
+    
+    local newLaneOptions = {}
+    for i = 1, maxLanes do
+        table.insert(newLaneOptions, "Lane" .. i)
+    end
+    
+    if selectedLaneIndex > maxLanes then
+        selectedLaneIndex = maxLanes
+    end
+    
+    if laneDropdown and type(laneDropdown.Refresh) == "function" then
+        laneDropdown:Refresh(newLaneOptions, "Lane" .. selectedLaneIndex)
+    end
+    
+    HumbleLib:Notify("World Switched", selected .. " loaded (Max: Lane " .. maxLanes .. ")", 2)
+end)
+
+local function getTargetCFrame(worldName, laneIndex)
+    local maxLanes = worldMaxLanes[worldName] or 0
+    if maxLanes == 0 then return nil, nil, "World 3 is currently empty!" end
+    
+    if laneIndex > maxLanes then 
+        return nil, nil, worldName .. " only allows up to Lane " .. maxLanes .. "!" 
+    end
+
+    local map = workspace:FindFirstChild("Map")
+    if map then
+        local targetFolder = map:FindFirstChild(worldName) or map
+        local win = targetFolder:FindFirstChild("Win") or map:FindFirstChild("Win")
+        if win then
+            local lane = win:FindFirstChild("Lane" .. laneIndex)
+            if lane and lane:FindFirstChild("WinPart") then
+                return lane.WinPart.CFrame, lane.WinPart, nil
+            end
+        end
+    end
+
+    if worldCFrames[worldName] and worldCFrames[worldName][laneIndex] then
+        return worldCFrames[worldName][laneIndex], nil, nil
+    end
+
+    return nil, nil, "Location not found for Lane " .. laneIndex
+end
+
+local function teleportToTarget()
+    local char = game.Players.LocalPlayer.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return false, "Character not found" end
+
+    local targetCFrame, actualPart, err = getTargetCFrame(selectedWorld, selectedLaneIndex)
+    if err then return false, err end
+
+    if targetCFrame then
+        char.HumanoidRootPart.CFrame = targetCFrame
+        if actualPart and firetouchinterest then
+            firetouchinterest(char.HumanoidRootPart, actualPart, 0)
+            task.wait(0.05)
+            firetouchinterest(char.HumanoidRootPart, actualPart, 1)
+        end
+        return true, nil
+    end
+    return false, "Invalid CFrame"
+end
+
+TeleportTab:CreateToggle("Loop Teleport", false, function(state)
+    loopTeleport = state
+    HumbleLib:Notify("Loop Teleport", state and "Started" or "Stopped", 2)
+end)
+
+TeleportTab:CreateSlider("Loop Delay (s)", 1, 10, 1, function(val)
+    loopWait = val
+end)
+
+TeleportTab:CreateButton("Instant Teleport", function()
+    local success, err = teleportToTarget()
+    if success then
+        HumbleLib:Notify("Success", "Teleported to Lane " .. selectedLaneIndex .. " [" .. selectedWorld .. "]", 2)
+    else
+        HumbleLib:Notify("Error", err or "Failed to teleport", 2.5)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if loopTeleport then
+            teleportToTarget()
+        end
+        task.wait(loopWait)
+    end
+end)
+
+MainTab:CreateButton("Copy Discord", function()
+    setclipboard("https://discord.gg/humblescriptz")
+    HumbleLib:Notify("Clipboard", "Discord link copied!", 2)
+end)
+
+MainTab:CreateToggle("Auto Farm", false, function(state)
+    HumbleLib:Notify("Auto Farm", state and "Enabled" or "Disabled", 2)
+end)
+
+MainTab:CreateSlider("WalkSpeed", 16, 250, 50, function(val)
+    if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = val
+    end
+end)
