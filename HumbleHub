@@ -1,4 +1,4 @@
--- [[ HUMBLE SCRIPTZ v4 - STANDALONE LIBRARY ]] --
+-- [[ HUMBLE SCRIPTZ v4.1 - STANDALONE LIBRARY ]] --
 -- Save this file as "Library.lua" or "init.lua" in your GitHub repository.
 
 local HumbleLib = {}
@@ -351,6 +351,25 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             SelectTab()
         end
 
+        -- Component 0: Section Label / Header
+        function Tab:CreateLabel(labelText)
+            local LabelCard = Instance.new("Frame")
+            LabelCard.Parent = ContentFrame
+            LabelCard.BackgroundColor3 = Theme.Background
+            LabelCard.Size = UDim2.new(1, 0, 0, 24)
+
+            local LabelText = Instance.new("TextLabel")
+            LabelText.Parent = LabelCard
+            LabelText.BackgroundTransparency = 1
+            LabelText.Position = UDim2.new(0, 4, 0, 0)
+            LabelText.Size = UDim2.new(1, -4, 1, 0)
+            LabelText.Font = Enum.Font.GothamBold
+            LabelText.Text = string.upper(labelText)
+            LabelText.TextColor3 = Theme.AccentGlow
+            LabelText.TextSize = 10
+            LabelText.TextXAlignment = Enum.TextXAlignment.Left
+        end
+
         -- Component 1: Action Button
         function Tab:CreateButton(btnText, callback)
             local Button = Instance.new("TextButton")
@@ -543,7 +562,61 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        -- Component 4: Accordion Dropdown
+        -- Component 4: Text Input / Box
+        function Tab:CreateTextBox(tbText, placeholder, default, callback)
+            local TB издания = default or ""
+
+            local TBCard = Instance.new("Frame")
+            TBCard.Parent = ContentFrame
+            TBCard.BackgroundColor3 = Theme.Card
+            TBCard.Size = UDim2.new(1, 0, 0, 48)
+
+            local CardCorner = Instance.new("UICorner")
+            CardCorner.CornerRadius = UDim.new(0, 8)
+            CardCorner.Parent = TBCard
+
+            local CardStroke = Instance.new("UIStroke")
+            CardStroke.Color = Theme.Border
+            CardStroke.Thickness = 1
+            CardStroke.Parent = TBCard
+
+            local Label = Instance.new("TextLabel")
+            Label.Parent = TBCard
+            Label.BackgroundTransparency = 1
+            Label.Position = UDim2.new(0, 12, 0, 6)
+            Label.Size = UDim2.new(1, -24, 0, 18)
+            Label.Font = Enum.Font.GothamMedium
+            Label.Text = tbText
+            Label.TextColor3 = Theme.TextPrimary
+            Label.TextSize = 12
+            Label.TextXAlignment = Enum.TextXAlignment.Left
+
+            local Box = Instance.new("TextBox")
+            Box.Parent = TBCard
+            Box.BackgroundColor3 = Theme.ToggleOff
+            Box.Position = UDim2.new(0, 12, 0, 26)
+            Box.Size = UDim2.new(1, -24, 0, 18)
+            Box.Font = Enum.Font.Gotham
+            Box.PlaceholderText = placeholder or "Type here..."
+            Box.PlaceholderColor3 = Theme.TextSecondary
+            Box.Text = TB издания
+            Box.TextColor3 = Theme.TextPrimary
+            Box.TextSize = 11
+            Box.ClearTextOnFocus = false
+            Box.TextXAlignment = Enum.TextXAlignment.Left
+
+            local BoxCorner = Instance.new("UICorner")
+            BoxCorner.CornerRadius = UDim.new(0, 4)
+            BoxCorner.Parent = Box
+
+            Box.FocusLost:Connect(function(enterPressed)
+                if callback then
+                    callback(Box.Text, enterPressed)
+                end
+            end)
+        end
+
+        -- Component 5: Accordion Dropdown
         function Tab:CreateDropdown(ddText, options, default, callback)
             local selected = default or options[1] or "Select..."
             local expanded = false
