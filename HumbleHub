@@ -1,11 +1,12 @@
--- [[ HUMBLE SCRIPTZ v4.1 - STANDALONE LIBRARY ]] --
+-- =======================================================
+-- [[ MODIFIED HUMBLE LIB (WITH :REFRESH() SUPPORT) ]]
+-- =======================================================
 local HumbleLib = {}
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 
--- Automatic cleanup on re-execution
 if CoreGui:FindFirstChild("HumbleScriptzV4") then
     CoreGui.HumbleScriptzV4:Destroy()
 end
@@ -15,7 +16,6 @@ ScreenGui.Name = "HumbleScriptzV4"
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 
--- Ultra-Modern Dark Glass & Neon Accent Theme Palette
 local Theme = {
     Background    = Color3.fromRGB(10, 11, 15),
     Sidebar       = Color3.fromRGB(15, 17, 23),
@@ -31,7 +31,6 @@ local Theme = {
     ToggleOn      = Color3.fromRGB(124, 58, 237)
 }
 
--- Notification Toast Engine
 local NotifyContainer = Instance.new("Frame")
 NotifyContainer.Name = "NotifyContainer"
 NotifyContainer.Parent = ScreenGui
@@ -341,24 +340,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             SelectTab()
         end
 
-        function Tab:CreateLabel(labelText)
-            local LabelCard = Instance.new("Frame")
-            LabelCard.Parent = ContentFrame
-            LabelCard.BackgroundColor3 = Theme.Background
-            LabelCard.Size = UDim2.new(1, 0, 0, 24)
-
-            local LabelText = Instance.new("TextLabel")
-            LabelText.Parent = LabelCard
-            LabelText.BackgroundTransparency = 1
-            LabelText.Position = UDim2.new(0, 4, 0, 0)
-            LabelText.Size = UDim2.new(1, -4, 1, 0)
-            LabelText.Font = Enum.Font.GothamBold
-            LabelText.Text = string.upper(labelText)
-            LabelText.TextColor3 = Theme.AccentGlow
-            LabelText.TextSize = 10
-            LabelText.TextXAlignment = Enum.TextXAlignment.Left
-        end
-
         function Tab:CreateButton(btnText, callback)
             local Button = Instance.new("TextButton")
             Button.Parent = ContentFrame
@@ -548,59 +529,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        function Tab:CreateTextBox(tbText, placeholder, default, callback)
-            local TBValue = default or ""
-
-            local TBCard = Instance.new("Frame")
-            TBCard.Parent = ContentFrame
-            TBCard.BackgroundColor3 = Theme.Card
-            TBCard.Size = UDim2.new(1, 0, 0, 48)
-
-            local CardCorner = Instance.new("UICorner")
-            CardCorner.CornerRadius = UDim.new(0, 8)
-            CardCorner.Parent = TBCard
-
-            local CardStroke = Instance.new("UIStroke")
-            CardStroke.Color = Theme.Border
-            CardStroke.Thickness = 1
-            CardStroke.Parent = TBCard
-
-            local Label = Instance.new("TextLabel")
-            Label.Parent = TBCard
-            Label.BackgroundTransparency = 1
-            Label.Position = UDim2.new(0, 12, 0, 6)
-            Label.Size = UDim2.new(1, -24, 0, 18)
-            Label.Font = Enum.Font.GothamMedium
-            Label.Text = tbText
-            Label.TextColor3 = Theme.TextPrimary
-            Label.TextSize = 12
-            Label.TextXAlignment = Enum.TextXAlignment.Left
-
-            local Box = Instance.new("TextBox")
-            Box.Parent = TBCard
-            Box.BackgroundColor3 = Theme.ToggleOff
-            Box.Position = UDim2.new(0, 12, 0, 26)
-            Box.Size = UDim2.new(1, -24, 0, 18)
-            Box.Font = Enum.Font.Gotham
-            Box.PlaceholderText = placeholder or "Type here..."
-            Box.PlaceholderColor3 = Theme.TextSecondary
-            Box.Text = TBValue
-            Box.TextColor3 = Theme.TextPrimary
-            Box.TextSize = 11
-            Box.ClearTextOnFocus = false
-            Box.TextXAlignment = Enum.TextXAlignment.Left
-
-            local BoxCorner = Instance.new("UICorner")
-            BoxCorner.CornerRadius = UDim.new(0, 4)
-            BoxCorner.Parent = Box
-
-            Box.FocusLost:Connect(function(enterPressed)
-                if callback then
-                    callback(Box.Text, enterPressed)
-                end
-            end)
-        end
-
         function Tab:CreateDropdown(ddText, options, default, callback)
             local selected = default or options[1] or "Select..."
             local expanded = false
@@ -650,37 +578,65 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             OptionLayout.Parent = OptionHolder
             OptionLayout.Padding = UDim.new(0, 2)
 
-            for _, opt in ipairs(options) do
-                local OptBtn = Instance.new("TextButton")
-                OptBtn.Parent = OptionHolder
-                OptBtn.BackgroundColor3 = Theme.Sidebar
-                OptBtn.Size = UDim2.new(1, -16, 0, 26)
-                OptBtn.Position = UDim2.new(0, 8, 0, 0)
-                OptBtn.Font = Enum.Font.Gotham
-                OptBtn.Text = opt
-                OptBtn.TextColor3 = Theme.TextSecondary
-                OptBtn.TextSize = 11
+            local function rebuildOptions(opts)
+                for _, child in ipairs(OptionHolder:GetChildren()) do
+                    if child:IsA("TextButton") then
+                        child:Destroy()
+                    end
+                end
+                OptionHolder.Size = UDim2.new(1, 0, 0, #opts * 28)
+                for _, opt in ipairs(opts) do
+                    local OptBtn = Instance.new("TextButton")
+                    OptBtn.Parent = OptionHolder
+                    OptBtn.BackgroundColor3 = Theme.Sidebar
+                    OptBtn.Size = UDim2.new(1, -16, 0, 26)
+                    OptBtn.Position = UDim2.new(0, 8, 0, 0)
+                    OptBtn.Font = Enum.Font.Gotham
+                    OptBtn.Text = opt
+                    OptBtn.TextColor3 = Theme.TextSecondary
+                    OptBtn.TextSize = 11
 
-                local OptCorner = Instance.new("UICorner")
-                OptCorner.CornerRadius = UDim.new(0, 6)
-                OptCorner.Parent = OptBtn
+                    local OptCorner = Instance.new("UICorner")
+                    OptCorner.CornerRadius = UDim.new(0, 6)
+                    OptCorner.Parent = OptBtn
 
-                OptBtn.MouseButton1Click:Connect(function()
-                    selected = opt
-                    MainButton.Text = "  " .. ddText .. ": " .. selected
-                    expanded = false
-                    TweenService:Create(DropdownCard, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 38)}):Play()
-                    Arrow.Text = "v"
-                    if callback then callback(selected) end
-                end)
+                    OptBtn.MouseButton1Click:Connect(function()
+                        selected = opt
+                        MainButton.Text = "  " .. ddText .. ": " .. selected
+                        expanded = false
+                        TweenService:Create(DropdownCard, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 38)}):Play()
+                        Arrow.Text = "v"
+                        if callback then callback(selected) end
+                    end)
+                end
             end
+
+            rebuildOptions(options)
 
             MainButton.MouseButton1Click:Connect(function()
                 expanded = not expanded
-                local targetHeight = expanded and (38 + (#options * 28) + 6) or 38
+                local currentOptCount = 0
+                for _, child in ipairs(OptionHolder:GetChildren()) do
+                    if child:IsA("TextButton") then currentOptCount = currentOptCount + 1 end
+                end
+                local targetHeight = expanded and (38 + (currentOptCount * 28) + 6) or 38
                 Arrow.Text = expanded and "^" or "v"
                 TweenService:Create(DropdownCard, TweenInfo.new(0.25), {Size = UDim2.new(1, 0, 0, targetHeight)}):Play()
             end)
+
+            local DropdownObj = {}
+            function DropdownObj:Refresh(newOptions, newDefault)
+                options = newOptions
+                selected = newDefault or options[1] or "Select..."
+                MainButton.Text = "  " .. ddText .. ": " .. selected
+                rebuildOptions(options)
+                if expanded then
+                    local targetHeight = 38 + (#options * 28) + 6
+                    DropdownCard.Size = UDim2.new(1, 0, 0, targetHeight)
+                end
+            end
+
+            return DropdownObj
         end
 
         return Tab
@@ -689,4 +645,3 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     return Window
 end
 
-return HumbleLib
