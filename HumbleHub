@@ -1,13 +1,12 @@
--- [[ HUMBLE SCRIPTZ v4.1 - STANDALONE LIBRARY ]] --
--- Save this file as "Library.lua" or "init.lua" in your GitHub repository.
-
+-- =============================================
+-- [[ EMBEDDED HUMBLE SCRIPTZ v4.1 LIBRARY ]]
+-- =============================================
 local HumbleLib = {}
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 
--- Automatic cleanup on re-execution
 if CoreGui:FindFirstChild("HumbleScriptzV4") then
     CoreGui.HumbleScriptzV4:Destroy()
 end
@@ -17,13 +16,12 @@ ScreenGui.Name = "HumbleScriptzV4"
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 
--- Ultra-Modern Dark Glass & Neon Accent Theme Palette
 local Theme = {
     Background    = Color3.fromRGB(10, 11, 15),
     Sidebar       = Color3.fromRGB(15, 17, 23),
     Card          = Color3.fromRGB(20, 23, 31),
     CardHover     = Color3.fromRGB(28, 31, 42),
-    Accent        = Color3.fromRGB(124, 58, 237), -- Vibrant Electric Purple
+    Accent        = Color3.fromRGB(124, 58, 237),
     AccentGlow    = Color3.fromRGB(167, 139, 250),
     TextPrimary   = Color3.fromRGB(245, 245, 250),
     TextSecondary = Color3.fromRGB(140, 145, 165),
@@ -33,7 +31,6 @@ local Theme = {
     ToggleOn      = Color3.fromRGB(124, 58, 237)
 }
 
--- Notification Toast Engine
 local NotifyContainer = Instance.new("Frame")
 NotifyContainer.Name = "NotifyContainer"
 NotifyContainer.Parent = ScreenGui
@@ -121,7 +118,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     local FrameWidth = IsMobile and math.min(Viewport.X * 0.94, 480) or 500
     local FrameHeight = IsMobile and math.min(Viewport.Y * 0.85, 330) or 340
 
-    -- Main Container Window
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
     MainFrame.Parent = ScreenGui
@@ -140,7 +136,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     MainStroke.Thickness = 1.2
     MainStroke.Parent = MainFrame
 
-    -- Floating Icon Toggle Button (Mobile & Desktop)
     local ToggleBtn = Instance.new("TextButton")
     ToggleBtn.Name = "ToggleButton"
     ToggleBtn.Parent = ScreenGui
@@ -183,7 +178,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
         MainFrame.Visible = not MainFrame.Visible
     end)
 
-    -- Sidebar Container
     local SidebarWidth = IsMobile and 125 or 140
     local Sidebar = Instance.new("Frame")
     Sidebar.Name = "Sidebar"
@@ -201,7 +195,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     SidebarLine.Position = UDim2.new(1, -1, 0, 0)
     SidebarLine.Size = UDim2.new(0, 1, 1, 0)
 
-    -- Brand Header
     local TitleContainer = Instance.new("Frame")
     TitleContainer.Name = "TitleContainer"
     TitleContainer.Parent = Sidebar
@@ -230,7 +223,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     SubLabel.TextSize = 9
     SubLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Navigation Container
     local TabHolder = Instance.new("ScrollingFrame")
     TabHolder.Name = "TabHolder"
     TabHolder.Parent = Sidebar
@@ -245,7 +237,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     TabListLayout.Padding = UDim.new(0, 4)
     TabListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
-    -- Content Display Panel
     local ContentArea = Instance.new("Frame")
     ContentArea.Name = "ContentArea"
     ContentArea.Parent = MainFrame
@@ -253,7 +244,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     ContentArea.Position = UDim2.new(0, SidebarWidth, 0, 0)
     ContentArea.Size = UDim2.new(1, -SidebarWidth, 1, 0)
 
-    -- Smooth Dragging Mechanism
     local dragging, dragInput, dragStart, startPos
     Sidebar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -277,7 +267,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
         end
     end)
 
-    -- Tab Builder Method
     function Window:CreateTab(tabName)
         local Tab = {}
 
@@ -351,7 +340,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             SelectTab()
         end
 
-        -- Component 0: Section Label / Header
         function Tab:CreateLabel(labelText)
             local LabelCard = Instance.new("Frame")
             LabelCard.Parent = ContentFrame
@@ -370,7 +358,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             LabelText.TextXAlignment = Enum.TextXAlignment.Left
         end
 
-        -- Component 1: Action Button
         function Tab:CreateButton(btnText, callback)
             local Button = Instance.new("TextButton")
             Button.Parent = ContentFrame
@@ -408,7 +395,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        -- Component 2: Glow Toggle
         function Tab:CreateToggle(toggleText, default, callback)
             local toggled = default or false
 
@@ -471,7 +457,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        -- Component 3: Precision Drag Slider
         function Tab:CreateSlider(sliderText, min, max, default, callback)
             local value = default or min
 
@@ -562,7 +547,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        -- Component 4: Text Input / Box
         function Tab:CreateTextBox(tbText, placeholder, default, callback)
             local TB издания = default or ""
 
@@ -616,7 +600,7 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        -- Component 5: Accordion Dropdown
+        -- [ PATCHED DROPDOWN COMPONENT ]
         function Tab:CreateDropdown(ddText, options, default, callback)
             local selected = default or options[1] or "Select..."
             local expanded = false
@@ -660,36 +644,45 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             OptionHolder.Parent = DropdownCard
             OptionHolder.BackgroundTransparency = 1
             OptionHolder.Position = UDim2.new(0, 0, 0, 38)
-            OptionHolder.Size = UDim2.new(1, 0, 0, #options * 28)
+            OptionHolder.Size = UDim2.new(1, 0, 0, 0) -- Dynamically handled by UIListLayout
 
             local OptionLayout = Instance.new("UIListLayout")
             OptionLayout.Parent = OptionHolder
             OptionLayout.Padding = UDim.new(0, 2)
+            
+            local function renderOptions(newOptions)
+                -- Clear old options
+                for _, child in pairs(OptionHolder:GetChildren()) do
+                    if child:IsA("TextButton") then child:Destroy() end
+                end
+                -- Create new options
+                for _, opt in ipairs(newOptions) do
+                    local OptBtn = Instance.new("TextButton")
+                    OptBtn.Parent = OptionHolder
+                    OptBtn.BackgroundColor3 = Theme.Sidebar
+                    OptBtn.Size = UDim2.new(1, -16, 0, 26)
+                    OptBtn.Position = UDim2.new(0, 8, 0, 0)
+                    OptBtn.Font = Enum.Font.Gotham
+                    OptBtn.Text = opt
+                    OptBtn.TextColor3 = Theme.TextSecondary
+                    OptBtn.TextSize = 11
 
-            for _, opt in ipairs(options) do
-                local OptBtn = Instance.new("TextButton")
-                OptBtn.Parent = OptionHolder
-                OptBtn.BackgroundColor3 = Theme.Sidebar
-                OptBtn.Size = UDim2.new(1, -16, 0, 26)
-                OptBtn.Position = UDim2.new(0, 8, 0, 0)
-                OptBtn.Font = Enum.Font.Gotham
-                OptBtn.Text = opt
-                OptBtn.TextColor3 = Theme.TextSecondary
-                OptBtn.TextSize = 11
+                    local OptCorner = Instance.new("UICorner")
+                    OptCorner.CornerRadius = UDim.new(0, 6)
+                    OptCorner.Parent = OptBtn
 
-                local OptCorner = Instance.new("UICorner")
-                OptCorner.CornerRadius = UDim.new(0, 6)
-                OptCorner.Parent = OptBtn
-
-                OptBtn.MouseButton1Click:Connect(function()
-                    selected = opt
-                    MainButton.Text = "  " .. ddText .. ": " .. selected
-                    expanded = false
-                    TweenService:Create(DropdownCard, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 38)}):Play()
-                    Arrow.Text = "v"
-                    if callback then callback(selected) end
-                end)
+                    OptBtn.MouseButton1Click:Connect(function()
+                        selected = opt
+                        MainButton.Text = "  " .. ddText .. ": " .. selected
+                        expanded = false
+                        TweenService:Create(DropdownCard, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 38)}):Play()
+                        Arrow.Text = "v"
+                        if callback then callback(selected) end
+                    end)
+                end
             end
+            
+            renderOptions(options)
 
             MainButton.MouseButton1Click:Connect(function()
                 expanded = not expanded
@@ -697,6 +690,22 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
                 Arrow.Text = expanded and "^" or "v"
                 TweenService:Create(DropdownCard, TweenInfo.new(0.25), {Size = UDim2.new(1, 0, 0, targetHeight)}):Play()
             end)
+
+            return {
+                Refresh = function(newOptions)
+                    options = newOptions
+                    local found = false
+                    for _, opt in ipairs(options) do
+                        if opt == selected then found = true; break end
+                    end
+                    if not found then
+                        selected = options[1] or "Select..."
+                        MainButton.Text = "  " .. ddText .. ": " .. selected
+                        if callback then callback(selected) end
+                    end
+                    renderOptions(options)
+                end
+            }
         end
 
         return Tab
@@ -704,5 +713,229 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
 
     return Window
 end
+-- =============================================
+-- [[ END OF EMBEDDED LIBRARY ]]
+-- =============================================
 
-return HumbleLib
+-- =============================================
+-- [[ YOUR SCRIPT LOGIC STARTS HERE ]]
+-- =============================================
+local Window = HumbleLib:CreateWindow("HUMBLE", "SCRIPTZ V4")
+
+HumbleLib:Notify("Humble Scriptz", "Loaded directly from GitHub (Embedded)!", 3)
+
+local MainTab = Window:CreateTab("Main")
+local TeleportTab = Window:CreateTab("Teleport")
+
+-- =======================================================
+-- [[ CFRAME DATA SETUP ]]
+-- =======================================================
+local worldMaxLanes = {
+    ["World 1"] = 25,
+    ["World 2"] = 20,
+    ["World 3"] = 0
+}
+
+local worldCFrames = {
+    ["World 1"] = {
+        [1]  = CFrame.new(1849.6803, 12.7774658, 2747.24878, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [2]  = CFrame.new(1851.6803, 12.7774658, 2628.39282, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [3]  = CFrame.new(1853.6803, 12.7774658, 2496.31396, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [4]  = CFrame.new(1853.01379, 12.7774658, 2363.08057, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [5]  = CFrame.new(1854.01379, 12.7774658, 2228.63745, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [6]  = CFrame.new(1851.6803, 12.7774658, 2085.93359, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [7]  = CFrame.new(1853.01379, 12.7774658, 1911.14661, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [8]  = CFrame.new(1851.6803, 12.7774658, 1729.71204, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [9]  = CFrame.new(1852.68005, 12.7774658, 1547.27722, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [10] = CFrame.new(1852.68005, 12.7774658, 1364.29785, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [11] = CFrame.new(1853.6803, 12.7774658, 1182.39795, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [12] = CFrame.new(1853.6803, 12.7774658, 985.234375, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [13] = CFrame.new(1856.34729, 12.9774485, 790.133057, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [14] = CFrame.new(1856.34729, 12.9774485, 593.019531, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [15] = CFrame.new(1855.34705, 12.9774485, 397.684082, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [16] = CFrame.new(1855.34705, 12.9774485, 200.570801, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [17] = CFrame.new(1857.34705, 12.9774485, 1.45727503, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [18] = CFrame.new(1855.34705, 13.2774658, -193.656738, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [19] = CFrame.new(1856.34644, 13.2774343, -392.223877, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [20] = CFrame.new(1856.34644, 13.2774343, -587.223877, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [21] = CFrame.new(1856.34644, 13.2774343, -784.223877, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [22] = CFrame.new(1856.34644, 13.2774343, -981.223877, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [23] = CFrame.new(1856.34644, 13.2774343, -1178.224, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [24] = CFrame.new(1856.34644, 13.2774343, -1376.22461, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [25] = CFrame.new(1856.34644, 13.344101, -1541.22461, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+    },
+    ["World 2"] = {
+        [1]  = CFrame.new(1856.01355, 13.0774527, 2712.18579, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [2]  = CFrame.new(1856.01367, 13.0774517, 2525.25146, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [3]  = CFrame.new(1857.01367, 13.0774517, 2334.97705, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [4]  = CFrame.new(1855.01367, 13.0774517, 2146.97705, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [5]  = CFrame.new(1857.01367, 13.0774517, 1960.97693, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [19] = CFrame.new(1857.34705, 13.2774563, -676.827759, -1, 0, 0, 0, 1, 0, 0, 0, -1),
+        [20] = CFrame.new(1856.01367, 13.1441221, -823.943848, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+    },
+    ["World 3"] = {}
+}
+
+-- Interpolate World 2 (Lanes 6 to 18)
+local w2_startZ = 1960.97693
+local w2_endZ = -676.827759
+local w2_stepZ = (w2_endZ - w2_startZ) / (19 - 5)
+
+for i = 6, 18 do
+    worldCFrames["World 2"][i] = CFrame.new(1856.01367, 13.0774517, w2_startZ + ((i - 5) * w2_stepZ), -1, 0, 0, 0, 1, 0, 0, 0, -1)
+end
+
+-- =======================================================
+-- [[ STATE & SETTINGS ]]
+-- =======================================================
+local selectedWorld = "World 1"
+local selectedLaneIndex = 1
+local loopTeleport = false
+local loopWait = 1
+
+-- Dynamic lane options generator
+local function getLaneOptions(worldName)
+    local max = worldMaxLanes[worldName] or 0
+    local opts = {}
+    for i = 1, max do
+        table.insert(opts, "Lane" .. i)
+    end
+    return opts
+end
+
+-- Helper Function: Target CFrame with strict enforcement
+local function getTargetCFrame(worldName, laneIndex)
+    local maxLanes = worldMaxLanes[worldName] or 0
+    if maxLanes == 0 then return nil, nil, "World 3 is currently empty!" end
+    
+    if laneIndex > maxLanes then 
+        return nil, nil, worldName .. " only allows up to Lane " .. maxLanes .. "!" 
+    end
+
+    local map = workspace:FindFirstChild("Map")
+    if map then
+        local targetFolder = map:FindFirstChild(worldName) or map
+        local win = targetFolder:FindFirstChild("Win") or map:FindFirstChild("Win")
+        if win then
+            local lane = win:FindFirstChild("Lane" .. laneIndex)
+            if lane and lane:FindFirstChild("WinPart") then
+                return lane.WinPart.CFrame, lane.WinPart, nil
+            end
+        end
+    end
+
+    if worldCFrames[worldName] and worldCFrames[worldName][laneIndex] then
+        return worldCFrames[worldName][laneIndex], nil, nil
+    end
+
+    return nil, nil, "Location not found for Lane " .. laneIndex
+end
+
+-- Teleport Execution
+local function teleportToTarget()
+    local char = game.Players.LocalPlayer.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return false, "Character not found" end
+
+    local targetCFrame, actualPart, err = getTargetCFrame(selectedWorld, selectedLaneIndex)
+    if err then return false, err end
+
+    if targetCFrame then
+        char.HumanoidRootPart.CFrame = targetCFrame
+        if actualPart and firetouchinterest then
+            firetouchinterest(char.HumanoidRootPart, actualPart, 0)
+            task.wait(0.05)
+            firetouchinterest(char.HumanoidRootPart, actualPart, 1)
+        end
+        return true, nil
+    end
+    return false, "Invalid CFrame"
+end
+
+-- =======================================================
+-- [[ TELEPORT TAB CONTROLS ]]
+-- =======================================================
+
+-- 1. Select World Dropdown
+TeleportTab:CreateDropdown("Select World", {"World 1", "World 2", "World 3"}, "World 1", function(selected)
+    selectedWorld = selected
+    local maxLanes = worldMaxLanes[selected] or 0
+    
+    -- NOW WORKS: Updates the Lane dropdown options dynamically!
+    if winLaneDropdown then
+        winLaneDropdown:Refresh(getLaneOptions(selected))
+    end
+    
+    -- If current selected lane exceeds the new world's limit, clamp it immediately
+    if maxLanes > 0 and selectedLaneIndex > maxLanes then
+        selectedLaneIndex = maxLanes
+        HumbleLib:Notify("World Switched", selected .. " loaded. Capped to Lane " .. maxLanes, 3)
+    else
+        HumbleLib:Notify("World Switched", selected .. " loaded", 2)
+    end
+end)
+
+-- 2. Select Win Lane Dropdown (Stored as a variable, now returns a refresh object thanks to the patch!)
+local winLaneDropdown = TeleportTab:CreateDropdown("Select Win Lane", getLaneOptions("World 1"), "Lane1", function(selected)
+    local laneNum = tonumber(selected:match("%d+")) or 1
+    local maxLanes = worldMaxLanes[selectedWorld] or 0
+    
+    -- Library limitation block: If the library shows 25 choices on World 2, block selection above 20
+    if maxLanes > 0 and laneNum > maxLanes then
+        selectedLaneIndex = maxLanes
+        HumbleLib:Notify("Action Blocked", selectedWorld .. " maximum is Lane " .. maxLanes .. "!", 3)
+        return
+    end
+
+    selectedLaneIndex = laneNum
+    HumbleLib:Notify("Target Set", selectedWorld .. " - Lane " .. selectedLaneIndex, 1.5)
+end)
+
+-- 3. Loop Teleport Switch
+TeleportTab:CreateToggle("Loop Teleport", false, function(state)
+    loopTeleport = state
+    HumbleLib:Notify("Loop Teleport", state and "Started" or "Stopped", 2)
+end)
+
+-- 4. Adjustable Loop Delay Slider
+TeleportTab:CreateSlider("Loop Delay (s)", 1, 10, 1, function(val)
+    loopWait = val
+end)
+
+-- 5. Instant Teleport Button
+TeleportTab:CreateButton("Instant Teleport", function()
+    local success, err = teleportToTarget()
+    if success then
+        HumbleLib:Notify("Success", "Teleported to Lane " .. selectedLaneIndex .. " [" .. selectedWorld .. "]", 2)
+    else
+        HumbleLib:Notify("Error", err or "Failed to teleport", 2.5)
+    end
+end)
+
+-- Background Thread for Loop
+task.spawn(function()
+    while true do
+        if loopTeleport then
+            teleportToTarget()
+        end
+        task.wait(loopWait)
+    end
+end)
+
+-- =======================================================
+-- [[ MAIN TAB CONTROLS ]]
+-- =======================================================
+
+MainTab:CreateButton("Copy Discord", function()
+    setclipboard("https://discord.gg/humblescriptz")
+    HumbleLib:Notify("Clipboard", "Discord link copied!", 2)
+end)
+
+MainTab:CreateToggle("Auto Farm", false, function(state)
+    HumbleLib:Notify("Auto Farm", state and "Enabled" or "Disabled", 2)
+end)
+
+MainTab:CreateSlider("WalkSpeed", 16, 250, 50, function(val)
+    if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = val
+    end
+end)
