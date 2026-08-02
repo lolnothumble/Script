@@ -564,7 +564,7 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
 
         -- Component 4: Text Input / Box
         function Tab:CreateTextBox(tbText, placeholder, default, callback)
-            local TB издания = default or ""
+            local TBValue = default or ""
 
             local TBCard = Instance.new("Frame")
             TBCard.Parent = ContentFrame
@@ -599,7 +599,7 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             Box.Font = Enum.Font.Gotham
             Box.PlaceholderText = placeholder or "Type here..."
             Box.PlaceholderColor3 = Theme.TextSecondary
-            Box.Text = TB издания
+            Box.Text = TBValue
             Box.TextColor3 = Theme.TextPrimary
             Box.TextSize = 11
             Box.ClearTextOnFocus = false
