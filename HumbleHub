@@ -1,6 +1,4 @@
 -- [[ HUMBLE SCRIPTZ v4.1 - STANDALONE LIBRARY ]] --
--- Save this file as "Library.lua" or "init.lua" in your GitHub repository.
-
 local HumbleLib = {}
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
@@ -23,7 +21,7 @@ local Theme = {
     Sidebar       = Color3.fromRGB(15, 17, 23),
     Card          = Color3.fromRGB(20, 23, 31),
     CardHover     = Color3.fromRGB(28, 31, 42),
-    Accent        = Color3.fromRGB(124, 58, 237), -- Vibrant Electric Purple
+    Accent        = Color3.fromRGB(124, 58, 237),
     AccentGlow    = Color3.fromRGB(167, 139, 250),
     TextPrimary   = Color3.fromRGB(245, 245, 250),
     TextSecondary = Color3.fromRGB(140, 145, 165),
@@ -121,7 +119,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     local FrameWidth = IsMobile and math.min(Viewport.X * 0.94, 480) or 500
     local FrameHeight = IsMobile and math.min(Viewport.Y * 0.85, 330) or 340
 
-    -- Main Container Window
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
     MainFrame.Parent = ScreenGui
@@ -140,7 +137,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     MainStroke.Thickness = 1.2
     MainStroke.Parent = MainFrame
 
-    -- Floating Icon Toggle Button (Mobile & Desktop)
     local ToggleBtn = Instance.new("TextButton")
     ToggleBtn.Name = "ToggleButton"
     ToggleBtn.Parent = ScreenGui
@@ -183,7 +179,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
         MainFrame.Visible = not MainFrame.Visible
     end)
 
-    -- Sidebar Container
     local SidebarWidth = IsMobile and 125 or 140
     local Sidebar = Instance.new("Frame")
     Sidebar.Name = "Sidebar"
@@ -201,7 +196,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     SidebarLine.Position = UDim2.new(1, -1, 0, 0)
     SidebarLine.Size = UDim2.new(0, 1, 1, 0)
 
-    -- Brand Header
     local TitleContainer = Instance.new("Frame")
     TitleContainer.Name = "TitleContainer"
     TitleContainer.Parent = Sidebar
@@ -230,7 +224,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     SubLabel.TextSize = 9
     SubLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Navigation Container
     local TabHolder = Instance.new("ScrollingFrame")
     TabHolder.Name = "TabHolder"
     TabHolder.Parent = Sidebar
@@ -245,7 +238,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     TabListLayout.Padding = UDim.new(0, 4)
     TabListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
-    -- Content Display Panel
     local ContentArea = Instance.new("Frame")
     ContentArea.Name = "ContentArea"
     ContentArea.Parent = MainFrame
@@ -253,7 +245,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     ContentArea.Position = UDim2.new(0, SidebarWidth, 0, 0)
     ContentArea.Size = UDim2.new(1, -SidebarWidth, 1, 0)
 
-    -- Smooth Dragging Mechanism
     local dragging, dragInput, dragStart, startPos
     Sidebar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -277,7 +268,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
         end
     end)
 
-    -- Tab Builder Method
     function Window:CreateTab(tabName)
         local Tab = {}
 
@@ -351,7 +341,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             SelectTab()
         end
 
-        -- Component 0: Section Label / Header
         function Tab:CreateLabel(labelText)
             local LabelCard = Instance.new("Frame")
             LabelCard.Parent = ContentFrame
@@ -370,7 +359,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             LabelText.TextXAlignment = Enum.TextXAlignment.Left
         end
 
-        -- Component 1: Action Button
         function Tab:CreateButton(btnText, callback)
             local Button = Instance.new("TextButton")
             Button.Parent = ContentFrame
@@ -408,7 +396,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        -- Component 2: Glow Toggle
         function Tab:CreateToggle(toggleText, default, callback)
             local toggled = default or false
 
@@ -471,7 +458,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        -- Component 3: Precision Drag Slider
         function Tab:CreateSlider(sliderText, min, max, default, callback)
             local value = default or min
 
@@ -562,7 +548,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        -- Component 4: Text Input / Box
         function Tab:CreateTextBox(tbText, placeholder, default, callback)
             local TBValue = default or ""
 
@@ -616,7 +601,6 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
             end)
         end
 
-        -- Component 5: Accordion Dropdown
         function Tab:CreateDropdown(ddText, options, default, callback)
             local selected = default or options[1] or "Select..."
             local expanded = false
