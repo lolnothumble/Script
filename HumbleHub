@@ -1,5 +1,5 @@
 -- =======================================================
--- [[ MODIFIED HUMBLE LIB (WITH :REFRESH() SUPPORT) ]]
+-- [[ HUMBLE LIB (UNIVERSAL UI) ]]
 -- =======================================================
 local HumbleLib = {}
 local CoreGui = game:GetService("CoreGui")
@@ -645,3 +645,4 @@ function HumbleLib:CreateWindow(hubTitle, hubSub)
     return Window
 end
 
+return HumbleLib
