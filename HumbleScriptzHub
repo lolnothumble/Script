@@ -241,7 +241,7 @@ function Library:CreateWindow(config)
     local activeTabPanel = nil
 
     --// ==========================================
-    --// 1. BUILT-IN HOME TAB (Always Present)
+    --// 1. BUILT-IN HOME TAB (Always Top LayoutOrder = 1)
     --// ==========================================
     local HomePanel = Instance.new("ScrollingFrame")
     HomePanel.Name = "HomePanel"
@@ -269,6 +269,7 @@ function Library:CreateWindow(config)
     HomeBtn.Size = UDim2.new(1, 0, 0, 38)
     HomeBtn.Text = ""
     HomeBtn.AutoButtonColor = false
+    HomeBtn.LayoutOrder = 1 -- Forced to top
 
     local HomeCorner = Instance.new("UICorner")
     HomeCorner.CornerRadius = UDim.new(0, 8)
@@ -446,7 +447,241 @@ function Library:CreateWindow(config)
     local Window = {}
 
     --// ==========================================
-    --// 2. CUSTOM TABS CREATION METHOD
+    --// 2. BUILT-IN SETTINGS TAB (Always Bottom LayoutOrder = 999)
+    --// ==========================================
+    local SettingsPanel = Instance.new("ScrollingFrame")
+    SettingsPanel.Name = "SettingsPanel"
+    SettingsPanel.Parent = ContentContainer
+    SettingsPanel.Active = true
+    SettingsPanel.BackgroundTransparency = 1
+    SettingsPanel.Size = UDim2.new(1, 0, 1, 0)
+    SettingsPanel.CanvasSize = UDim2.new(0, 0, 0, 0)
+    SettingsPanel.ScrollBarThickness = 3
+    SettingsPanel.ScrollBarImageColor3 = Color3.fromRGB(50, 45, 75)
+    SettingsPanel.Visible = false
+
+    local SettingsListLayout = Instance.new("UIListLayout")
+    SettingsListLayout.Parent = SettingsPanel
+    SettingsListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    SettingsListLayout.Padding = UDim.new(0, 8)
+
+    SettingsListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        SettingsPanel.CanvasSize = UDim2.new(0, 0, 0, SettingsListLayout.AbsoluteContentSize.Y + 15)
+    end)
+
+    local SettingsBtn = Instance.new("TextButton")
+    SettingsBtn.Parent = Sidebar
+    SettingsBtn.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
+    SettingsBtn.Size = UDim2.new(1, 0, 0, 38)
+    SettingsBtn.Text = ""
+    SettingsBtn.AutoButtonColor = false
+    SettingsBtn.LayoutOrder = 999 -- Forced to bottom
+
+    local SettingsCorner = Instance.new("UICorner")
+    SettingsCorner.CornerRadius = UDim.new(0, 8)
+    SettingsCorner.Parent = SettingsBtn
+
+    local SettingsIcon = Instance.new("ImageLabel")
+    SettingsIcon.Parent = SettingsBtn
+    SettingsIcon.BackgroundTransparency = 1
+    SettingsIcon.Position = UDim2.new(0, 10, 0.5, -9)
+    SettingsIcon.Size = UDim2.new(0, 18, 0, 18)
+    SettingsIcon.Image = "rbxassetid://6031263089"
+    SettingsIcon.ImageColor3 = Color3.fromRGB(160, 160, 180)
+
+    local SettingsLabel = Instance.new("TextLabel")
+    SettingsLabel.Parent = SettingsBtn
+    SettingsLabel.BackgroundTransparency = 1
+    SettingsLabel.Position = UDim2.new(0, 36, 0, 0)
+    SettingsLabel.Size = UDim2.new(1, -36, 1, 0)
+    SettingsLabel.Font = Enum.Font.GothamMedium
+    SettingsLabel.Text = "Settings"
+    SettingsLabel.TextColor3 = Color3.fromRGB(160, 160, 180)
+    SettingsLabel.TextSize = 12
+    SettingsLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+    SettingsBtn.MouseButton1Click:Connect(function()
+        if activeTabPanel then activeTabPanel.Visible = false end
+        SettingsPanel.Visible = true
+        activeTabPanel = SettingsPanel
+
+        if activeTabButton then
+            activeTabButton.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
+            activeTabButton:FindFirstChild("ImageLabel").ImageColor3 = Color3.fromRGB(160, 160, 180)
+            activeTabButton:FindFirstChild("TextLabel").TextColor3 = Color3.fromRGB(160, 160, 180)
+        end
+        SettingsBtn.BackgroundColor3 = Color3.fromRGB(30, 25, 45)
+        SettingsIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
+        SettingsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        activeTabButton = SettingsBtn
+    end)
+
+    local function addHeader(text)
+        local lbl = Instance.new("TextLabel")
+        lbl.Parent = SettingsPanel
+        lbl.BackgroundTransparency = 1
+        lbl.Size = UDim2.new(1, -8, 0, 24)
+        lbl.Font = Enum.Font.GothamBold
+        lbl.Text = text
+        lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+        lbl.TextSize = 12.5
+        lbl.TextXAlignment = Enum.TextXAlignment.Left
+    end
+
+    addHeader("🚀 Server Utilities")
+
+    local UtilHolder = Instance.new("Frame")
+    UtilHolder.Parent = SettingsPanel
+    UtilHolder.BackgroundTransparency = 1
+    UtilHolder.Size = UDim2.new(1, -8, 0, 32)
+
+    local UtilLayout = Instance.new("UIListLayout")
+    UtilLayout.Parent = UtilHolder
+    UtilLayout.FillDirection = Enum.FillDirection.Horizontal
+    UtilLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UtilLayout.Padding = UDim.new(0, 8)
+
+    local function createUtilBtn(text, onClick)
+        local btn = Instance.new("TextButton")
+        btn.Parent = UtilHolder
+        btn.BackgroundColor3 = Color3.fromRGB(22, 22, 32)
+        btn.Size = UDim2.new(0.32, -3, 1, 0)
+        btn.Font = Enum.Font.GothamMedium
+        btn.Text = text
+        btn.TextColor3 = Color3.fromRGB(220, 220, 240)
+        btn.TextSize = 11
+        btn.AutoButtonColor = false
+
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 6)
+        corner.Parent = btn
+
+        btn.MouseButton1Click:Connect(onClick)
+    end
+
+    createUtilBtn("🔄 Rejoin", function()
+        game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
+    end)
+
+    createUtilBtn("🌐 Server Hop", function()
+        local HttpService = game:GetService("HttpService")
+        local TeleportService = game:GetService("TeleportService")
+        local servers = {}
+        local success, res = pcall(function()
+            return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+        end)
+        if success and res and res.data then
+            for _, s in ipairs(res.data) do
+                if s.playing < s.maxPlayers and s.id ~= game.JobId then
+                    table.insert(servers, s.id)
+                end
+            end
+            if #servers > 0 then
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], LocalPlayer)
+            end
+        end
+    end)
+
+    createUtilBtn("🗑️ Unload UI", function()
+        ScreenGui:Destroy()
+    end)
+
+    addHeader("🛡️ Anti-AFK Protection")
+
+    local antiAfkRow = Instance.new("Frame")
+    antiAfkRow.Parent = SettingsPanel
+    antiAfkRow.BackgroundColor3 = Color3.fromRGB(15, 15, 21)
+    antiAfkRow.Size = UDim2.new(1, -8, 0, 38)
+
+    local afkCorner = Instance.new("UICorner")
+    afkCorner.CornerRadius = UDim.new(0, 8)
+    afkCorner.Parent = antiAfkRow
+
+    local afkStroke = Instance.new("UIStroke")
+    afkStroke.Parent = antiAfkRow
+    afkStroke.Color = Color3.fromRGB(35, 32, 50)
+    afkStroke.Thickness = 1
+
+    local afkLabel = Instance.new("TextLabel")
+    afkLabel.Parent = antiAfkRow
+    afkLabel.BackgroundTransparency = 1
+    afkLabel.Position = UDim2.new(0, 14, 0, 0)
+    afkLabel.Size = UDim2.new(0, 260, 1, 0)
+    afkLabel.Font = Enum.Font.GothamMedium
+    afkLabel.Text = "Anti-AFK Bypass"
+    afkLabel.TextColor3 = Color3.fromRGB(235, 235, 245)
+    afkLabel.TextSize = 11.5
+    afkLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+    local afkToggleBtn = Instance.new("TextButton")
+    afkToggleBtn.Parent = antiAfkRow
+    afkToggleBtn.Position = UDim2.new(1, -65, 0, 7)
+    afkToggleBtn.Size = UDim2.new(0, 54, 0, 24)
+    afkToggleBtn.Font = Enum.Font.GothamBold
+    afkToggleBtn.Text = "OFF"
+    afkToggleBtn.TextColor3 = Color3.fromRGB(230, 75, 75)
+    afkToggleBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    afkToggleBtn.TextSize = 11
+    afkToggleBtn.AutoButtonColor = false
+
+    local afkBtnCorner = Instance.new("UICorner")
+    afkBtnCorner.CornerRadius = UDim.new(0, 6)
+    afkBtnCorner.Parent = afkToggleBtn
+
+    local antiAfkConnection = nil
+    afkToggleBtn.MouseButton1Click:Connect(function()
+        if afkToggleBtn.Text == "OFF" then
+            afkToggleBtn.Text = "ON"
+            afkToggleBtn.TextColor3 = Color3.fromRGB(70, 240, 120)
+            afkToggleBtn.BackgroundColor3 = Color3.fromRGB(20, 45, 30)
+            
+            local vu = game:GetService("VirtualUser")
+            antiAfkConnection = LocalPlayer.Idled:Connect(function()
+                vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+                task.wait(1)
+                vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+            end)
+        else
+            afkToggleBtn.Text = "OFF"
+            afkToggleBtn.TextColor3 = Color3.fromRGB(230, 75, 75)
+            afkToggleBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+            if antiAfkConnection then
+                antiAfkConnection:Disconnect()
+                antiAfkConnection = nil
+            end
+        end
+    end)
+
+    addHeader("ℹ️ Owner & Hub Information")
+
+    local InfoBox = Instance.new("Frame")
+    InfoBox.Parent = SettingsPanel
+    InfoBox.BackgroundColor3 = Color3.fromRGB(15, 15, 21)
+    InfoBox.Size = UDim2.new(1, -8, 0, 65)
+
+    local InfoCorner = Instance.new("UICorner")
+    InfoCorner.CornerRadius = UDim.new(0, 8)
+    InfoCorner.Parent = InfoBox
+
+    local InfoStroke = Instance.new("UIStroke")
+    InfoStroke.Parent = InfoBox
+    InfoStroke.Color = Color3.fromRGB(35, 32, 50)
+    InfoStroke.Thickness = 1
+
+    local InfoText = Instance.new("TextLabel")
+    InfoText.Parent = InfoBox
+    InfoText.BackgroundTransparency = 1
+    InfoText.Position = UDim2.new(0, 12, 0, 8)
+    InfoText.Size = UDim2.new(1, -20, 1, -16)
+    InfoText.Font = Enum.Font.GothamMedium
+    InfoText.Text = "🔒 Owner Security Lock: Active\n👤 Authorized User: " .. LocalPlayer.Name .. " (" .. LocalPlayer.UserId .. ")\n🛠️ Hub Type: Universal Multi-Script Library Suite"
+    InfoText.TextColor3 = Color3.fromRGB(150, 150, 170)
+    InfoText.TextSize = 11
+    InfoText.TextXAlignment = Enum.TextXAlignment.Left
+    InfoText.TextYAlignment = Enum.TextYAlignment.Top
+
+    --// ==========================================
+    --// 3. CUSTOM TABS CREATION METHOD (LayoutOrder = 10)
     --// ==========================================
     function Window:CreateTab(tabName, iconAssetId)
         iconAssetId = iconAssetId or "rbxassetid://6034509993"
@@ -477,6 +712,7 @@ function Library:CreateWindow(config)
         TabBtn.Size = UDim2.new(1, 0, 0, 38)
         TabBtn.Text = ""
         TabBtn.AutoButtonColor = false
+        TabBtn.LayoutOrder = 10 -- Sits nicely between Home (1) and Settings (999)
 
         local TabCorner = Instance.new("UICorner")
         TabCorner.CornerRadius = UDim.new(0, 8)
@@ -790,239 +1026,6 @@ function Library:CreateWindow(config)
 
         return TabSection
     end
-
-    --// ==========================================
-    --// 3. BUILT-IN SETTINGS TAB (Always Present)
-    --// ==========================================
-    local SettingsPanel = Instance.new("ScrollingFrame")
-    SettingsPanel.Name = "SettingsPanel"
-    SettingsPanel.Parent = ContentContainer
-    SettingsPanel.Active = true
-    SettingsPanel.BackgroundTransparency = 1
-    SettingsPanel.Size = UDim2.new(1, 0, 1, 0)
-    SettingsPanel.CanvasSize = UDim2.new(0, 0, 0, 0)
-    SettingsPanel.ScrollBarThickness = 3
-    SettingsPanel.ScrollBarImageColor3 = Color3.fromRGB(50, 45, 75)
-    SettingsPanel.Visible = false
-
-    local SettingsListLayout = Instance.new("UIListLayout")
-    SettingsListLayout.Parent = SettingsPanel
-    SettingsListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    SettingsListLayout.Padding = UDim.new(0, 8)
-
-    SettingsListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        SettingsPanel.CanvasSize = UDim2.new(0, 0, 0, SettingsListLayout.AbsoluteContentSize.Y + 15)
-    end)
-
-    local SettingsBtn = Instance.new("TextButton")
-    SettingsBtn.Parent = Sidebar
-    SettingsBtn.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
-    SettingsBtn.Size = UDim2.new(1, 0, 0, 38)
-    SettingsBtn.Text = ""
-    SettingsBtn.AutoButtonColor = false
-
-    local SettingsCorner = Instance.new("UICorner")
-    SettingsCorner.CornerRadius = UDim.new(0, 8)
-    SettingsCorner.Parent = SettingsBtn
-
-    local SettingsIcon = Instance.new("ImageLabel")
-    SettingsIcon.Parent = SettingsBtn
-    SettingsIcon.BackgroundTransparency = 1
-    SettingsIcon.Position = UDim2.new(0, 10, 0.5, -9)
-    SettingsIcon.Size = UDim2.new(0, 18, 0, 18)
-    SettingsIcon.Image = "rbxassetid://6031263089"
-    SettingsIcon.ImageColor3 = Color3.fromRGB(160, 160, 180)
-
-    local SettingsLabel = Instance.new("TextLabel")
-    SettingsLabel.Parent = SettingsBtn
-    SettingsLabel.BackgroundTransparency = 1
-    SettingsLabel.Position = UDim2.new(0, 36, 0, 0)
-    SettingsLabel.Size = UDim2.new(1, -36, 1, 0)
-    SettingsLabel.Font = Enum.Font.GothamMedium
-    SettingsLabel.Text = "Settings"
-    SettingsLabel.TextColor3 = Color3.fromRGB(160, 160, 180)
-    SettingsLabel.TextSize = 12
-    SettingsLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-    SettingsBtn.MouseButton1Click:Connect(function()
-        if activeTabPanel then activeTabPanel.Visible = false end
-        SettingsPanel.Visible = true
-        activeTabPanel = SettingsPanel
-
-        if activeTabButton then
-            activeTabButton.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
-            activeTabButton:FindFirstChild("ImageLabel").ImageColor3 = Color3.fromRGB(160, 160, 180)
-            activeTabButton:FindFirstChild("TextLabel").TextColor3 = Color3.fromRGB(160, 160, 180)
-        end
-        SettingsBtn.BackgroundColor3 = Color3.fromRGB(30, 25, 45)
-        SettingsIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
-        SettingsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        activeTabButton = SettingsBtn
-    end)
-
-    local function addHeader(text)
-        local lbl = Instance.new("TextLabel")
-        lbl.Parent = SettingsPanel
-        lbl.BackgroundTransparency = 1
-        lbl.Size = UDim2.new(1, -8, 0, 24)
-        lbl.Font = Enum.Font.GothamBold
-        lbl.Text = text
-        lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
-        lbl.TextSize = 12.5
-        lbl.TextXAlignment = Enum.TextXAlignment.Left
-    end
-
-    addHeader("🚀 Server Utilities")
-
-    local UtilHolder = Instance.new("Frame")
-    UtilHolder.Parent = SettingsPanel
-    UtilHolder.BackgroundTransparency = 1
-    UtilHolder.Size = UDim2.new(1, -8, 0, 32)
-
-    local UtilLayout = Instance.new("UIListLayout")
-    UtilLayout.Parent = UtilHolder
-    UtilLayout.FillDirection = Enum.FillDirection.Horizontal
-    UtilLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UtilLayout.Padding = UDim.new(0, 8)
-
-    local function createUtilBtn(text, onClick)
-        local btn = Instance.new("TextButton")
-        btn.Parent = UtilHolder
-        btn.BackgroundColor3 = Color3.fromRGB(22, 22, 32)
-        btn.Size = UDim2.new(0.32, -3, 1, 0)
-        btn.Font = Enum.Font.GothamMedium
-        btn.Text = text
-        btn.TextColor3 = Color3.fromRGB(220, 220, 240)
-        btn.TextSize = 11
-        btn.AutoButtonColor = false
-
-        local corner = Instance.new("UICorner")
-        corner.CornerRadius = UDim.new(0, 6)
-        corner.Parent = btn
-
-        btn.MouseButton1Click:Connect(onClick)
-    end
-
-    createUtilBtn("🔄 Rejoin", function()
-        game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
-    end)
-
-    createUtilBtn("🌐 Server Hop", function()
-        local HttpService = game:GetService("HttpService")
-        local TeleportService = game:GetService("TeleportService")
-        local servers = {}
-        local success, res = pcall(function()
-            return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
-        end)
-        if success and res and res.data then
-            for _, s in ipairs(res.data) do
-                if s.playing < s.maxPlayers and s.id ~= game.JobId then
-                    table.insert(servers, s.id)
-                end
-            end
-            if #servers > 0 then
-                TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], LocalPlayer)
-            end
-        end
-    end)
-
-    createUtilBtn("🗑️ Unload UI", function()
-        ScreenGui:Destroy()
-    end)
-
-    addHeader("🛡️ Anti-AFK Protection")
-
-    local antiAfkRow = Instance.new("Frame")
-    antiAfkRow.Parent = SettingsPanel
-    antiAfkRow.BackgroundColor3 = Color3.fromRGB(15, 15, 21)
-    antiAfkRow.Size = UDim2.new(1, -8, 0, 38)
-
-    local afkCorner = Instance.new("UICorner")
-    afkCorner.CornerRadius = UDim.new(0, 8)
-    afkCorner.Parent = antiAfkRow
-
-    local afkStroke = Instance.new("UIStroke")
-    afkStroke.Parent = antiAfkRow
-    afkStroke.Color = Color3.fromRGB(35, 32, 50)
-    afkStroke.Thickness = 1
-
-    local afkLabel = Instance.new("TextLabel")
-    afkLabel.Parent = antiAfkRow
-    afkLabel.BackgroundTransparency = 1
-    afkLabel.Position = UDim2.new(0, 14, 0, 0)
-    afkLabel.Size = UDim2.new(0, 260, 1, 0)
-    afkLabel.Font = Enum.Font.GothamMedium
-    afkLabel.Text = "Anti-AFK Bypass"
-    afkLabel.TextColor3 = Color3.fromRGB(235, 235, 245)
-    afkLabel.TextSize = 11.5
-    afkLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-    local afkToggleBtn = Instance.new("TextButton")
-    afkToggleBtn.Parent = antiAfkRow
-    afkToggleBtn.Position = UDim2.new(1, -65, 0, 7)
-    afkToggleBtn.Size = UDim2.new(0, 54, 0, 24)
-    afkToggleBtn.Font = Enum.Font.GothamBold
-    afkToggleBtn.Text = "OFF"
-    afkToggleBtn.TextColor3 = Color3.fromRGB(230, 75, 75)
-    afkToggleBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    afkToggleBtn.TextSize = 11
-    afkToggleBtn.AutoButtonColor = false
-
-    local afkBtnCorner = Instance.new("UICorner")
-    afkBtnCorner.CornerRadius = UDim.new(0, 6)
-    afkBtnCorner.Parent = afkToggleBtn
-
-    local antiAfkConnection = nil
-    afkToggleBtn.MouseButton1Click:Connect(function()
-        if afkToggleBtn.Text == "OFF" then
-            afkToggleBtn.Text = "ON"
-            afkToggleBtn.TextColor3 = Color3.fromRGB(70, 240, 120)
-            afkToggleBtn.BackgroundColor3 = Color3.fromRGB(20, 45, 30)
-            
-            local vu = game:GetService("VirtualUser")
-            antiAfkConnection = LocalPlayer.Idled:Connect(function()
-                vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-                task.wait(1)
-                vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-            end)
-        else
-            afkToggleBtn.Text = "OFF"
-            afkToggleBtn.TextColor3 = Color3.fromRGB(230, 75, 75)
-            afkToggleBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-            if antiAfkConnection then
-                antiAfkConnection:Disconnect()
-                antiAfkConnection = nil
-            end
-        end
-    end)
-
-    addHeader("ℹ️ Owner & Hub Information")
-
-    local InfoBox = Instance.new("Frame")
-    InfoBox.Parent = SettingsPanel
-    InfoBox.BackgroundColor3 = Color3.fromRGB(15, 15, 21)
-    InfoBox.Size = UDim2.new(1, -8, 0, 65)
-
-    local InfoCorner = Instance.new("UICorner")
-    InfoCorner.CornerRadius = UDim.new(0, 8)
-    InfoCorner.Parent = InfoBox
-
-    local InfoStroke = Instance.new("UIStroke")
-    InfoStroke.Parent = InfoBox
-    InfoStroke.Color = Color3.fromRGB(35, 32, 50)
-    InfoStroke.Thickness = 1
-
-    local InfoText = Instance.new("TextLabel")
-    InfoText.Parent = InfoBox
-    InfoText.BackgroundTransparency = 1
-    InfoText.Position = UDim2.new(0, 12, 0, 8)
-    InfoText.Size = UDim2.new(1, -20, 1, -16)
-    InfoText.Font = Enum.Font.GothamMedium
-    InfoText.Text = "🔒 Owner Security Lock: Active\n👤 Authorized User: " .. LocalPlayer.Name .. " (" .. LocalPlayer.UserId .. ")\n🛠️ Hub Type: Universal Multi-Script Library Suite"
-    InfoText.TextColor3 = Color3.fromRGB(150, 150, 170)
-    InfoText.TextSize = 11
-    InfoText.TextXAlignment = Enum.TextXAlignment.Left
-    InfoText.TextYAlignment = Enum.TextYAlignment.Top
 
     return Window
 end
