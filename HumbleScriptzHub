@@ -241,7 +241,7 @@ function Library:CreateWindow(config)
     local activeTabPanel = nil
 
     --// ==========================================
-    --// 1. BUILT-IN HOME TAB (Always Top LayoutOrder = 1)
+    --// 1. BUILT-IN HOME TAB (LayoutOrder = 1 - Always Top)
     --// ==========================================
     local HomePanel = Instance.new("ScrollingFrame")
     HomePanel.Name = "HomePanel"
@@ -269,7 +269,7 @@ function Library:CreateWindow(config)
     HomeBtn.Size = UDim2.new(1, 0, 0, 38)
     HomeBtn.Text = ""
     HomeBtn.AutoButtonColor = false
-    HomeBtn.LayoutOrder = 1 -- Forced to top
+    HomeBtn.LayoutOrder = 1 -- Forced strictly to the absolute top
 
     local HomeCorner = Instance.new("UICorner")
     HomeCorner.CornerRadius = UDim.new(0, 8)
@@ -447,7 +447,7 @@ function Library:CreateWindow(config)
     local Window = {}
 
     --// ==========================================
-    --// 2. BUILT-IN SETTINGS TAB (Always Bottom LayoutOrder = 999)
+    --// 2. BUILT-IN SETTINGS TAB (LayoutOrder = 999999 - Always Absolute Bottom)
     --// ==========================================
     local SettingsPanel = Instance.new("ScrollingFrame")
     SettingsPanel.Name = "SettingsPanel"
@@ -475,7 +475,7 @@ function Library:CreateWindow(config)
     SettingsBtn.Size = UDim2.new(1, 0, 0, 38)
     SettingsBtn.Text = ""
     SettingsBtn.AutoButtonColor = false
-    SettingsBtn.LayoutOrder = 999 -- Forced to bottom
+    SettingsBtn.LayoutOrder = 999999 -- Forced strictly to the absolute bottom below everything
 
     local SettingsCorner = Instance.new("UICorner")
     SettingsCorner.CornerRadius = UDim.new(0, 8)
@@ -681,8 +681,10 @@ function Library:CreateWindow(config)
     InfoText.TextYAlignment = Enum.TextYAlignment.Top
 
     --// ==========================================
-    --// 3. CUSTOM TABS CREATION METHOD (LayoutOrder = 10)
+    --// 3. CUSTOM TABS CREATION METHOD (LayoutOrder = 10, 11, 12... inserted sequentially between Home and Settings)
     --// ==========================================
+    local customTabCounter = 10 -- Starts right after Home (1) and before Settings (999999)
+
     function Window:CreateTab(tabName, iconAssetId)
         iconAssetId = iconAssetId or "rbxassetid://6034509993"
         
@@ -712,7 +714,8 @@ function Library:CreateWindow(config)
         TabBtn.Size = UDim2.new(1, 0, 0, 38)
         TabBtn.Text = ""
         TabBtn.AutoButtonColor = false
-        TabBtn.LayoutOrder = 10 -- Sits nicely between Home (1) and Settings (999)
+        TabBtn.LayoutOrder = customTabCounter -- Assigns sequential layout order (10, 11, 12...) so custom features land cleanly between Home and Settings
+        customTabCounter = customTabCounter + 1
 
         local TabCorner = Instance.new("UICorner")
         TabCorner.CornerRadius = UDim.new(0, 8)
