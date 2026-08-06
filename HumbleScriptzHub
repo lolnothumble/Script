@@ -237,14 +237,12 @@ function Library:CreateWindow(config)
         MainFrame.Visible = not MainFrame.Visible
     end)
 
-    -- Track active tab switching state globally
     local activeTabButton = nil
     local activeTabPanel = nil
 
-    --// Window API Object
-    local Window = {}
-
-    --// 1. Built-in Default HOME Tab
+    --// ==========================================
+    --// 1. BUILT-IN HOME TAB (Always Present)
+    --// ==========================================
     local HomePanel = Instance.new("ScrollingFrame")
     HomePanel.Name = "HomePanel"
     HomePanel.Parent = ContentContainer
@@ -444,7 +442,12 @@ function Library:CreateWindow(config)
         activeTabButton = HomeBtn
     end)
 
-    --// 2. Custom Tabs Creation Method
+    --// Window API Object
+    local Window = {}
+
+    --// ==========================================
+    --// 2. CUSTOM TABS CREATION METHOD
+    --// ==========================================
     function Window:CreateTab(tabName, iconAssetId)
         iconAssetId = iconAssetId or "rbxassetid://6034509993"
         
@@ -788,7 +791,9 @@ function Library:CreateWindow(config)
         return TabSection
     end
 
-    --// 3. Built-in Auto-Included Settings Tab (Rejoin, Server Hop, Anti-AFK, Info)
+    --// ==========================================
+    --// 3. BUILT-IN SETTINGS TAB (Always Present)
+    --// ==========================================
     local SettingsPanel = Instance.new("ScrollingFrame")
     SettingsPanel.Name = "SettingsPanel"
     SettingsPanel.Parent = ContentContainer
