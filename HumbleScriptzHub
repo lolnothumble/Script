@@ -1,5 +1,5 @@
 --// HumbleScriptz - Ultimate Personal UI Library Framework
---// Designed for Delta Executor | Multi-Script Library Edition (Updated)
+--// Designed for Delta Executor | Multi-Script Library Edition (Updated for Mobile)
 
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -35,8 +35,8 @@ function Library:CreateWindow(config)
     FloatingBtn.Name = "FloatingBtn"
     FloatingBtn.Parent = ScreenGui
     FloatingBtn.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
-    FloatingBtn.Position = UDim2.new(0, 30, 0.5, -28)
-    FloatingBtn.Size = UDim2.new(0, 52, 0, 52)
+    FloatingBtn.Position = UDim2.new(0, 15, 0.5, -26)
+    FloatingBtn.Size = UDim2.new(0, 48, 0, 48)
     FloatingBtn.Image = "rbxassetid://6031094678"
     FloatingBtn.ImageColor3 = Color3.fromRGB(140, 95, 255)
     FloatingBtn.ScaleType = Enum.ScaleType.Fit
@@ -53,17 +53,21 @@ function Library:CreateWindow(config)
     BtnStroke.Transparency = 0.2
     BtnStroke.Thickness = 1.5
 
-    local BtnAspect = Instance.new("UIAspectRatioConstraint")
-    BtnAspect.Parent = FloatingBtn
-
-    --// Main Window Frame
+    --// Main Window Frame (Responsive)
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
     MainFrame.Parent = ScreenGui
     MainFrame.BackgroundColor3 = Color3.fromRGB(11, 11, 15)
-    MainFrame.Position = UDim2.new(0.5, -325, 0.5, -200)
-    MainFrame.Size = UDim2.new(0, 650, 0, 410)
+    MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+    MainFrame.Size = UDim2.new(0.95, 0, 0.9, 0)
     MainFrame.Visible = true
+
+    -- Limits size for PC, allows scaling for mobile
+    local MainConstraint = Instance.new("UISizeConstraint")
+    MainConstraint.MaxSize = Vector2.new(650, 410)
+    MainConstraint.MinSize = Vector2.new(320, 260)
+    MainConstraint.Parent = MainFrame
 
     local MainCorner = Instance.new("UICorner")
     MainCorner.CornerRadius = UDim.new(0, 12)
@@ -106,12 +110,13 @@ function Library:CreateWindow(config)
     LogoText.Parent = TopBar
     LogoText.BackgroundTransparency = 1
     LogoText.Position = UDim2.new(0, 46, 0, 0)
-    LogoText.Size = UDim2.new(0, 300, 1, 0)
+    LogoText.Size = UDim2.new(1, -90, 1, 0)
     LogoText.Font = Enum.Font.GothamBold
     LogoText.Text = windowName
     LogoText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    LogoText.TextSize = 15
+    LogoText.TextSize = 14
     LogoText.TextXAlignment = Enum.TextXAlignment.Left
+    LogoText.TextTruncate = Enum.TextTruncate.AtEnd
 
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Parent = TopBar
@@ -152,32 +157,34 @@ function Library:CreateWindow(config)
     UserNameLabel.Parent = ProfileBar
     UserNameLabel.BackgroundTransparency = 1
     UserNameLabel.Position = UDim2.new(0, 58, 0, 10)
-    UserNameLabel.Size = UDim2.new(0, 350, 0, 18)
+    UserNameLabel.Size = UDim2.new(1, -70, 0, 18)
     UserNameLabel.Font = Enum.Font.GothamBold
     UserNameLabel.Text = ownerName
     UserNameLabel.TextColor3 = Color3.fromRGB(245, 245, 255)
     UserNameLabel.TextSize = 13
     UserNameLabel.TextXAlignment = Enum.TextXAlignment.Left
+    UserNameLabel.TextTruncate = Enum.TextTruncate.AtEnd
 
     local UserRoleLabel = Instance.new("TextLabel")
     UserRoleLabel.Parent = ProfileBar
     UserRoleLabel.BackgroundTransparency = 1
     UserRoleLabel.Position = UDim2.new(0, 58, 0, 28)
-    UserRoleLabel.Size = UDim2.new(0, 350, 0, 16)
+    UserRoleLabel.Size = UDim2.new(1, -70, 0, 16)
     UserRoleLabel.Font = Enum.Font.GothamMedium
     UserRoleLabel.Text = "⭐ Owner Library Access [Master Key]"
     UserRoleLabel.TextColor3 = Color3.fromRGB(70, 240, 120)
-    UserRoleLabel.TextSize = 11
+    UserRoleLabel.TextSize = 10
     UserRoleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    UserRoleLabel.TextTruncate = Enum.TextTruncate.AtEnd
 
-    --// Sidebar Navigation Container
+    --// Sidebar Navigation Container (Responsive Width)
     local Sidebar = Instance.new("ScrollingFrame")
     Sidebar.Parent = MainFrame
     Sidebar.Active = true
     Sidebar.BackgroundColor3 = Color3.fromRGB(12, 12, 16)
     Sidebar.BorderSizePixel = 0
     Sidebar.Position = UDim2.new(0, 0, 0, 100)
-    Sidebar.Size = UDim2.new(0, 155, 1, -100)
+    Sidebar.Size = UDim2.new(0, 115, 1, -100)
     Sidebar.CanvasSize = UDim2.new(0, 0, 0, 0)
     Sidebar.ScrollBarThickness = 0
 
@@ -193,15 +200,15 @@ function Library:CreateWindow(config)
     local SidebarPadding = Instance.new("UIPadding")
     SidebarPadding.Parent = Sidebar
     SidebarPadding.PaddingTop = UDim.new(0, 10)
-    SidebarPadding.PaddingLeft = UDim.new(0, 10)
-    SidebarPadding.PaddingRight = UDim.new(0, 10)
+    SidebarPadding.PaddingLeft = UDim.new(0, 6)
+    SidebarPadding.PaddingRight = UDim.new(0, 6)
 
-    --// Content Container
+    --// Content Container (Responsive Width)
     local ContentContainer = Instance.new("Frame")
     ContentContainer.Parent = MainFrame
     ContentContainer.BackgroundTransparency = 1
-    ContentContainer.Position = UDim2.new(0, 162, 0, 108)
-    ContentContainer.Size = UDim2.new(1, -168, 1, -114)
+    ContentContainer.Position = UDim2.new(0, 122, 0, 108)
+    ContentContainer.Size = UDim2.new(1, -130, 1, -114)
 
     --// Dragging System
     local function makeDraggable(guiObject, dragTarget)
@@ -245,9 +252,7 @@ function Library:CreateWindow(config)
     local activeTabButton = nil
     local activeTabPanel = nil
 
-    --// ==========================================
-    --// 1. BUILT-IN HOME TAB (LayoutOrder = 1 - Always Top)
-    --// ==========================================
+    --// 1. BUILT-IN HOME TAB
     local HomePanel = Instance.new("ScrollingFrame")
     HomePanel.Name = "HomePanel"
     HomePanel.Parent = ContentContainer
@@ -274,7 +279,7 @@ function Library:CreateWindow(config)
     HomeBtn.Size = UDim2.new(1, 0, 0, 38)
     HomeBtn.Text = ""
     HomeBtn.AutoButtonColor = false
-    HomeBtn.LayoutOrder = 1 -- Forced strictly to the absolute top
+    HomeBtn.LayoutOrder = 1
 
     local HomeCorner = Instance.new("UICorner")
     HomeCorner.CornerRadius = UDim.new(0, 8)
@@ -283,7 +288,7 @@ function Library:CreateWindow(config)
     local HomeIcon = Instance.new("ImageLabel")
     HomeIcon.Parent = HomeBtn
     HomeIcon.BackgroundTransparency = 1
-    HomeIcon.Position = UDim2.new(0, 10, 0.5, -9)
+    HomeIcon.Position = UDim2.new(0, 6, 0.5, -9)
     HomeIcon.Size = UDim2.new(0, 18, 0, 18)
     HomeIcon.Image = "rbxassetid://6031094667"
     HomeIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
@@ -291,12 +296,12 @@ function Library:CreateWindow(config)
     local HomeLabel = Instance.new("TextLabel")
     HomeLabel.Parent = HomeBtn
     HomeLabel.BackgroundTransparency = 1
-    HomeLabel.Position = UDim2.new(0, 36, 0, 0)
-    HomeLabel.Size = UDim2.new(1, -36, 1, 0)
+    HomeLabel.Position = UDim2.new(0, 30, 0, 0)
+    HomeLabel.Size = UDim2.new(1, -30, 1, 0)
     HomeLabel.Font = Enum.Font.GothamMedium
     HomeLabel.Text = "Home"
     HomeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    HomeLabel.TextSize = 12
+    HomeLabel.TextSize = 11
     HomeLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     activeTabButton = HomeBtn
@@ -327,11 +332,12 @@ function Library:CreateWindow(config)
     WelcomeText.Parent = WelcomeBox
     WelcomeText.BackgroundTransparency = 1
     WelcomeText.Position = UDim2.new(0, 14, 0, 10)
-    WelcomeText.Size = UDim2.new(1, -20, 0, 95)
+    WelcomeText.Size = UDim2.new(1, -28, 1, -20)
     WelcomeText.Font = Enum.Font.Gotham
     WelcomeText.Text = "Welcome Back, " .. LocalPlayer.Name .. "\nPlaying: " .. getGameName() .. " (" .. game.PlaceId .. ")\nOwner: HumbleScriptz | Status: [🟢 Library Active]\nLoaded Environment: Universal Multi-Script Hub."
     WelcomeText.TextColor3 = Color3.fromRGB(190, 190, 210)
     WelcomeText.TextSize = 11.5
+    WelcomeText.TextWrapped = true
     WelcomeText.TextXAlignment = Enum.TextXAlignment.Left
     WelcomeText.TextYAlignment = Enum.TextYAlignment.Top
 
@@ -345,9 +351,9 @@ function Library:CreateWindow(config)
     CopyUserIdBtn.BackgroundColor3 = Color3.fromRGB(22, 22, 32)
     CopyUserIdBtn.Size = UDim2.new(0.48, 0, 1, 0)
     CopyUserIdBtn.Font = Enum.Font.GothamMedium
-    CopyUserIdBtn.Text = "📋 Copy User ID"
+    CopyUserIdBtn.Text = "📋 User ID"
     CopyUserIdBtn.TextColor3 = Color3.fromRGB(220, 220, 240)
-    CopyUserIdBtn.TextSize = 11
+    CopyUserIdBtn.TextSize = 10
 
     local CopyUserCorner = Instance.new("UICorner")
     CopyUserCorner.CornerRadius = UDim.new(0, 6)
@@ -358,7 +364,7 @@ function Library:CreateWindow(config)
             setclipboard(tostring(LocalPlayer.UserId))
             CopyUserIdBtn.Text = "✅ Copied!"
             task.wait(1.5)
-            CopyUserIdBtn.Text = "📋 Copy User ID"
+            CopyUserIdBtn.Text = "📋 User ID"
         end
     end)
 
@@ -368,9 +374,9 @@ function Library:CreateWindow(config)
     CopyGameIdBtn.Position = UDim2.new(0.52, 0, 0, 0)
     CopyGameIdBtn.Size = UDim2.new(0.48, 0, 1, 0)
     CopyGameIdBtn.Font = Enum.Font.GothamMedium
-    CopyGameIdBtn.Text = "📋 Copy Game ID"
+    CopyGameIdBtn.Text = "📋 Game ID"
     CopyGameIdBtn.TextColor3 = Color3.fromRGB(220, 220, 240)
-    CopyGameIdBtn.TextSize = 11
+    CopyGameIdBtn.TextSize = 10
 
     local CopyGameCorner = Instance.new("UICorner")
     CopyGameCorner.CornerRadius = UDim.new(0, 6)
@@ -381,7 +387,7 @@ function Library:CreateWindow(config)
             setclipboard(tostring(game.PlaceId))
             CopyGameIdBtn.Text = "✅ Copied!"
             task.wait(1.5)
-            CopyGameIdBtn.Text = "📋 Copy Game ID"
+            CopyGameIdBtn.Text = "📋 Game ID"
         end
     end)
 
@@ -404,7 +410,7 @@ function Library:CreateWindow(config)
         btn.Font = Enum.Font.GothamBold
         btn.Text = "  " .. name
         btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        btn.TextSize = 12
+        btn.TextSize = 10
         btn.AutoButtonColor = false
 
         local corner = Instance.new("UICorner")
@@ -414,23 +420,23 @@ function Library:CreateWindow(config)
         local icon = Instance.new("ImageLabel")
         icon.Parent = btn
         icon.BackgroundTransparency = 1
-        icon.Position = UDim2.new(0, 10, 0.5, -10)
-        icon.Size = UDim2.new(0, 20, 0, 20)
+        icon.Position = UDim2.new(0, 6, 0.5, -8)
+        icon.Size = UDim2.new(0, 16, 0, 16)
         icon.Image = iconId
         icon.ImageColor3 = Color3.fromRGB(255, 255, 255)
 
         btn.MouseButton1Click:Connect(function()
             if setclipboard then
                 setclipboard(linkUrl)
-                btn.Text = "  ✅ Link Copied!"
+                btn.Text = " ✅ Copied!"
                 task.wait(1.5)
                 btn.Text = "  " .. name
             end
         end)
     end
 
-    createSocialButton("Join Discord", "rbxassetid://6023426915", discordLink, Color3.fromRGB(88, 101, 242))
-    createSocialButton("YouTube Channel", "rbxassetid://6034509993", youtubeLink, Color3.fromRGB(205, 32, 31))
+    createSocialButton("Discord", "rbxassetid://6023426915", discordLink, Color3.fromRGB(88, 101, 242))
+    createSocialButton("YouTube", "rbxassetid://6034509993", youtubeLink, Color3.fromRGB(205, 32, 31))
 
     HomeBtn.MouseButton1Click:Connect(function()
         if activeTabPanel then activeTabPanel.Visible = false end
@@ -448,12 +454,9 @@ function Library:CreateWindow(config)
         activeTabButton = HomeBtn
     end)
 
-    --// Window API Object
     local Window = {}
 
-    --// ==========================================
-    --// 2. BUILT-IN SETTINGS TAB (LayoutOrder = 999999 - Always Absolute Bottom)
-    --// ==========================================
+    --// 2. BUILT-IN SETTINGS TAB
     local SettingsPanel = Instance.new("ScrollingFrame")
     SettingsPanel.Name = "SettingsPanel"
     SettingsPanel.Parent = ContentContainer
@@ -480,7 +483,7 @@ function Library:CreateWindow(config)
     SettingsBtn.Size = UDim2.new(1, 0, 0, 38)
     SettingsBtn.Text = ""
     SettingsBtn.AutoButtonColor = false
-    SettingsBtn.LayoutOrder = 999999 -- Forced strictly to the absolute bottom below everything
+    SettingsBtn.LayoutOrder = 999999
 
     local SettingsCorner = Instance.new("UICorner")
     SettingsCorner.CornerRadius = UDim.new(0, 8)
@@ -489,7 +492,7 @@ function Library:CreateWindow(config)
     local SettingsIcon = Instance.new("ImageLabel")
     SettingsIcon.Parent = SettingsBtn
     SettingsIcon.BackgroundTransparency = 1
-    SettingsIcon.Position = UDim2.new(0, 10, 0.5, -9)
+    SettingsIcon.Position = UDim2.new(0, 6, 0.5, -9)
     SettingsIcon.Size = UDim2.new(0, 18, 0, 18)
     SettingsIcon.Image = "rbxassetid://6031263089"
     SettingsIcon.ImageColor3 = Color3.fromRGB(160, 160, 180)
@@ -497,12 +500,12 @@ function Library:CreateWindow(config)
     local SettingsLabel = Instance.new("TextLabel")
     SettingsLabel.Parent = SettingsBtn
     SettingsLabel.BackgroundTransparency = 1
-    SettingsLabel.Position = UDim2.new(0, 36, 0, 0)
-    SettingsLabel.Size = UDim2.new(1, -36, 1, 0)
+    SettingsLabel.Position = UDim2.new(0, 30, 0, 0)
+    SettingsLabel.Size = UDim2.new(1, -30, 1, 0)
     SettingsLabel.Font = Enum.Font.GothamMedium
     SettingsLabel.Text = "Settings"
     SettingsLabel.TextColor3 = Color3.fromRGB(160, 160, 180)
-    SettingsLabel.TextSize = 12
+    SettingsLabel.TextSize = 11
     SettingsLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     SettingsBtn.MouseButton1Click:Connect(function()
@@ -529,7 +532,7 @@ function Library:CreateWindow(config)
         lbl.Font = Enum.Font.GothamBold
         lbl.Text = text
         lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
-        lbl.TextSize = 12.5
+        lbl.TextSize = 12
         lbl.TextXAlignment = Enum.TextXAlignment.Left
     end
 
@@ -544,17 +547,17 @@ function Library:CreateWindow(config)
     UtilLayout.Parent = UtilHolder
     UtilLayout.FillDirection = Enum.FillDirection.Horizontal
     UtilLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UtilLayout.Padding = UDim.new(0, 8)
+    UtilLayout.Padding = UDim.new(0, 6)
 
     local function createUtilBtn(text, onClick)
         local btn = Instance.new("TextButton")
         btn.Parent = UtilHolder
         btn.BackgroundColor3 = Color3.fromRGB(22, 22, 32)
-        btn.Size = UDim2.new(0.32, -3, 1, 0)
+        btn.Size = UDim2.new(0.32, -2, 1, 0)
         btn.Font = Enum.Font.GothamMedium
         btn.Text = text
         btn.TextColor3 = Color3.fromRGB(220, 220, 240)
-        btn.TextSize = 11
+        btn.TextSize = 10
         btn.AutoButtonColor = false
 
         local corner = Instance.new("UICorner")
@@ -570,7 +573,7 @@ function Library:CreateWindow(config)
         end
     end)
 
-    createUtilBtn("🌐 Server Hop", function()
+    createUtilBtn("🌐 Hop", function()
         pcall(function()
             local HttpService = game:GetService("HttpService")
             local TeleportService = game:GetService("TeleportService")
@@ -591,11 +594,11 @@ function Library:CreateWindow(config)
         end)
     end)
 
-    createUtilBtn("🗑️ Unload UI", function()
+    createUtilBtn("🗑️ Unload", function()
         ScreenGui:Destroy()
     end)
 
-    addHeader("🛡️ Anti-AFK Protection")
+    addHeader("🛡️ Anti-AFK")
 
     local antiAfkRow = Instance.new("Frame")
     antiAfkRow.Parent = SettingsPanel
@@ -614,23 +617,23 @@ function Library:CreateWindow(config)
     local afkLabel = Instance.new("TextLabel")
     afkLabel.Parent = antiAfkRow
     afkLabel.BackgroundTransparency = 1
-    afkLabel.Position = UDim2.new(0, 14, 0, 0)
-    afkLabel.Size = UDim2.new(0, 260, 1, 0)
+    afkLabel.Position = UDim2.new(0, 10, 0, 0)
+    afkLabel.Size = UDim2.new(1, -75, 1, 0)
     afkLabel.Font = Enum.Font.GothamMedium
     afkLabel.Text = "Anti-AFK Bypass"
     afkLabel.TextColor3 = Color3.fromRGB(235, 235, 245)
-    afkLabel.TextSize = 11.5
+    afkLabel.TextSize = 11
     afkLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     local afkToggleBtn = Instance.new("TextButton")
     afkToggleBtn.Parent = antiAfkRow
-    afkToggleBtn.Position = UDim2.new(1, -65, 0, 7)
-    afkToggleBtn.Size = UDim2.new(0, 54, 0, 24)
+    afkToggleBtn.Position = UDim2.new(1, -55, 0, 7)
+    afkToggleBtn.Size = UDim2.new(0, 48, 0, 24)
     afkToggleBtn.Font = Enum.Font.GothamBold
     afkToggleBtn.Text = "OFF"
     afkToggleBtn.TextColor3 = Color3.fromRGB(230, 75, 75)
     afkToggleBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    afkToggleBtn.TextSize = 11
+    afkToggleBtn.TextSize = 10
     afkToggleBtn.AutoButtonColor = false
 
     local afkBtnCorner = Instance.new("UICorner")
@@ -663,12 +666,12 @@ function Library:CreateWindow(config)
         end
     end)
 
-    addHeader("ℹ️ Owner & Hub Information")
+    addHeader("ℹ️ Information")
 
     local InfoBox = Instance.new("Frame")
     InfoBox.Parent = SettingsPanel
     InfoBox.BackgroundColor3 = Color3.fromRGB(15, 15, 21)
-    InfoBox.Size = UDim2.new(1, -8, 0, 65)
+    InfoBox.Size = UDim2.new(1, -8, 0, 75)
 
     local InfoCorner = Instance.new("UICorner")
     InfoCorner.CornerRadius = UDim.new(0, 8)
@@ -682,18 +685,17 @@ function Library:CreateWindow(config)
     local InfoText = Instance.new("TextLabel")
     InfoText.Parent = InfoBox
     InfoText.BackgroundTransparency = 1
-    InfoText.Position = UDim2.new(0, 12, 0, 8)
+    InfoText.Position = UDim2.new(0, 10, 0, 8)
     InfoText.Size = UDim2.new(1, -20, 1, -16)
     InfoText.Font = Enum.Font.GothamMedium
-    InfoText.Text = "🔒 Owner Security Lock: Active\n👤 Authorized User: " .. LocalPlayer.Name .. " (" .. LocalPlayer.UserId .. ")\n🛠️ Hub Type: Universal Multi-Script Library Suite"
+    InfoText.Text = "🔒 Security Lock: Active\n👤 User: " .. LocalPlayer.Name .. "\n🛠️ Type: Multi-Script Suite"
     InfoText.TextColor3 = Color3.fromRGB(150, 150, 170)
     InfoText.TextSize = 11
+    InfoText.TextWrapped = true
     InfoText.TextXAlignment = Enum.TextXAlignment.Left
     InfoText.TextYAlignment = Enum.TextYAlignment.Top
 
-    --// ==========================================
     --// 3. CUSTOM TABS CREATION METHOD
-    --// ==========================================
     local customTabCounter = 10
 
     function Window:CreateTab(tabName, iconAssetId)
@@ -735,7 +737,7 @@ function Library:CreateWindow(config)
         local TabIcon = Instance.new("ImageLabel")
         TabIcon.Parent = TabBtn
         TabIcon.BackgroundTransparency = 1
-        TabIcon.Position = UDim2.new(0, 10, 0.5, -9)
+        TabIcon.Position = UDim2.new(0, 6, 0.5, -9)
         TabIcon.Size = UDim2.new(0, 18, 0, 18)
         TabIcon.Image = iconAssetId
         TabIcon.ImageColor3 = Color3.fromRGB(160, 160, 180)
@@ -743,13 +745,14 @@ function Library:CreateWindow(config)
         local TabLabel = Instance.new("TextLabel")
         TabLabel.Parent = TabBtn
         TabLabel.BackgroundTransparency = 1
-        TabLabel.Position = UDim2.new(0, 36, 0, 0)
-        TabLabel.Size = UDim2.new(1, -36, 1, 0)
+        TabLabel.Position = UDim2.new(0, 30, 0, 0)
+        TabLabel.Size = UDim2.new(1, -30, 1, 0)
         TabLabel.Font = Enum.Font.GothamMedium
         TabLabel.Text = tabName
         TabLabel.TextColor3 = Color3.fromRGB(160, 160, 180)
-        TabLabel.TextSize = 12
+        TabLabel.TextSize = 11
         TabLabel.TextXAlignment = Enum.TextXAlignment.Left
+        TabLabel.TextTruncate = Enum.TextTruncate.AtEnd
 
         TabBtn.MouseButton1Click:Connect(function()
             if activeTabPanel then activeTabPanel.Visible = false end
@@ -767,7 +770,6 @@ function Library:CreateWindow(config)
             activeTabButton = TabBtn
         end)
 
-        --// Tab Elements API
         local TabSection = {}
 
         function TabSection:AddLabel(text)
@@ -778,7 +780,8 @@ function Library:CreateWindow(config)
             lbl.Font = Enum.Font.GothamBold
             lbl.Text = text
             lbl.TextColor3 = Color3.fromRGB(235, 235, 245)
-            lbl.TextSize = 12
+            lbl.TextSize = 11.5
+            lbl.TextWrapped = true
             lbl.TextXAlignment = Enum.TextXAlignment.Left
         end
 
@@ -792,7 +795,7 @@ function Library:CreateWindow(config)
             btn.Font = Enum.Font.GothamMedium
             btn.Text = "  " .. text
             btn.TextColor3 = Color3.fromRGB(220, 220, 240)
-            btn.TextSize = 11.5
+            btn.TextSize = 11
             btn.TextXAlignment = Enum.TextXAlignment.Left
             btn.AutoButtonColor = false
 
@@ -839,20 +842,21 @@ function Library:CreateWindow(config)
             local label = Instance.new("TextLabel")
             label.Parent = row
             label.BackgroundTransparency = 1
-            label.Position = UDim2.new(0, 14, 0, 0)
-            label.Size = UDim2.new(0, 260, 1, 0)
+            label.Position = UDim2.new(0, 10, 0, 0)
+            label.Size = UDim2.new(1, -70, 1, 0)
             label.Font = Enum.Font.GothamMedium
             label.Text = text
             label.TextColor3 = Color3.fromRGB(235, 235, 245)
-            label.TextSize = 11.5
+            label.TextSize = 11
             label.TextXAlignment = Enum.TextXAlignment.Left
+            label.TextTruncate = Enum.TextTruncate.AtEnd
 
             local toggleBtn = Instance.new("TextButton")
             toggleBtn.Parent = row
-            toggleBtn.Position = UDim2.new(1, -65, 0, 7)
-            toggleBtn.Size = UDim2.new(0, 54, 0, 24)
+            toggleBtn.Position = UDim2.new(1, -55, 0, 7)
+            toggleBtn.Size = UDim2.new(0, 48, 0, 24)
             toggleBtn.Font = Enum.Font.GothamBold
-            toggleBtn.TextSize = 11
+            toggleBtn.TextSize = 10
             toggleBtn.AutoButtonColor = false
 
             local btnCorner = Instance.new("UICorner")
@@ -903,19 +907,20 @@ function Library:CreateWindow(config)
             local label = Instance.new("TextLabel")
             label.Parent = container
             label.BackgroundTransparency = 1
-            label.Position = UDim2.new(0, 14, 0, 6)
-            label.Size = UDim2.new(1, -28, 0, 18)
+            label.Position = UDim2.new(0, 10, 0, 6)
+            label.Size = UDim2.new(1, -20, 0, 18)
             label.Font = Enum.Font.GothamMedium
             label.Text = text .. ": " .. tostring(default)
             label.TextColor3 = Color3.fromRGB(235, 235, 245)
-            label.TextSize = 11.5
+            label.TextSize = 11
             label.TextXAlignment = Enum.TextXAlignment.Left
+            label.TextTruncate = Enum.TextTruncate.AtEnd
 
             local sliderBar = Instance.new("Frame")
             sliderBar.Parent = container
             sliderBar.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-            sliderBar.Position = UDim2.new(0, 14, 0, 32)
-            sliderBar.Size = UDim2.new(1, -28, 0, 8)
+            sliderBar.Position = UDim2.new(0, 10, 0, 32)
+            sliderBar.Size = UDim2.new(1, -20, 0, 8)
 
             local barCorner = Instance.new("UICorner")
             barCorner.CornerRadius = UDim.new(1, 0)
@@ -991,8 +996,9 @@ function Library:CreateWindow(config)
             selectBtn.Font = Enum.Font.GothamMedium
             selectBtn.Text = "  " .. text .. ": " .. tostring(selectedOption)
             selectBtn.TextColor3 = Color3.fromRGB(235, 235, 245)
-            selectBtn.TextSize = 11.5
+            selectBtn.TextSize = 11
             selectBtn.TextXAlignment = Enum.TextXAlignment.Left
+            selectBtn.TextTruncate = Enum.TextTruncate.AtEnd
 
             local dropdownList = Instance.new("ScrollingFrame")
             dropdownList.Parent = container
@@ -1016,7 +1022,7 @@ function Library:CreateWindow(config)
                 optBtn.Font = Enum.Font.Gotham
                 optBtn.Text = tostring(opt)
                 optBtn.TextColor3 = Color3.fromRGB(200, 200, 220)
-                optBtn.TextSize = 11
+                optBtn.TextSize = 10
 
                 local optCorner = Instance.new("UICorner")
                 optCorner.CornerRadius = UDim.new(0, 6)
