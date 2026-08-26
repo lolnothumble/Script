@@ -40,7 +40,7 @@ if savedKey and savedKey ~= "" then
         if not (isJson and data.status == "error") then
             -- Valid Key: Set security flag and silently execute script without opening UI
             _G.HumbleSecureLoaded = true
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/Merge%20a%20Mini%20Army"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/gamelist"))()
             return
         else
             -- Expired or Invalid Key: Delete old saved key file
@@ -201,7 +201,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
             
             -- Set the security flag and execute your main script successfully
             _G.HumbleSecureLoaded = true
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/Merge%20a%20Mini%20Army"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/gamelist"))()
         end
     else
         StatusLabel.Text = "Server error. Try again later."
