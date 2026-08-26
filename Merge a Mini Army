@@ -3,7 +3,7 @@ if not _G.HumbleSecureLoaded then
     local Players = game:GetService("Players")
     local LocalPlayer = Players.LocalPlayer or Players:GetPropertyChangedSignal("LocalPlayer"):Wait()
     if LocalPlayer then
-        LocalPlayer:Kick("Direct execution is not allowed! Go get the official loader from the owner @lolhumble.")
+        LocalPlayer:Kick("Unauthorized direct execution. Use the official loader.")
     end
     return
 end
