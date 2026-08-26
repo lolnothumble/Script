@@ -1,0 +1,206 @@
+-- HumbleScriptz Roblox Client Loader & Key UI (Auto-Save & UserId Edition)
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+
+local LocalPlayer = Players.LocalPlayer or Players:GetPropertyChangedSignal("LocalPlayer"):Wait()
+local UserId = tostring(LocalPlayer.UserId) -- Binds key directly to the Roblox Account ID
+local API_URL = "http://humblescriptz.x10.mx/api/verify.php"
+local GET_KEY_URL = "http://humblescriptz.x10.mx/getkey.php?hwid=" .. UserId
+local KEY_FILE = "HumbleKey.txt"
+
+-- Functions for File System & Clipboard
+local function getSavedKey()
+    if isfile and isfile(KEY_FILE) and readfile then
+        return readfile(KEY_FILE)
+    end
+    return nil
+end
+
+local function saveKey(key)
+    if writefile then
+        writefile(KEY_FILE, key)
+    end
+end
+
+local function removeSavedKey()
+    if delfile and isfile and isfile(KEY_FILE) then
+        delfile(KEY_FILE)
+    end
+end
+
+-- 1. Auto-Login Check (Skips UI if saved key is valid)
+local savedKey = getSavedKey()
+if savedKey and savedKey ~= "" then
+    local success, response = pcall(function()
+        return game:HttpGet(API_URL .. "?key=" .. savedKey .. "&hwid=" .. UserId .. "&app_id=" .. game.PlaceId)
+    end)
+
+    if success then
+        local isJson, data = pcall(function() return HttpService:JSONDecode(response) end)
+        if not (isJson and data.status == "error") then
+            -- Valid Key: Silently execute script without opening UI
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/testonly"))()
+            return
+        else
+            -- Expired or Invalid Key: Delete old saved key file
+            removeSavedKey()
+        end
+    end
+end
+
+-- 2. Build Key UI (Only shown if no valid saved key exists)
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "HumbleKeyUI"
+ScreenGui.Parent = (gethui and gethui()) or game:GetService("CoreGui")
+
+local Main = Instance.new("Frame")
+Main.Size = UDim2.new(0, 360, 0, 230)
+Main.Position = UDim2.new(0.5, -180, 0.5, -115)
+Main.BackgroundColor3 = Color3.fromRGB(24, 28, 36)
+Main.BorderSizePixel = 0
+Main.Active = true
+Main.Draggable = true
+Main.Parent = ScreenGui
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 8)
+UICorner.Parent = Main
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Text = "HumbleScriptz Key System"
+Title.TextColor3 = Color3.fromRGB(129, 140, 248)
+Title.TextSize = 16
+Title.Font = Enum.Font.SourceSansBold
+Title.BackgroundTransparency = 1
+Title.Parent = Main
+
+local KeyBox = Instance.new("TextBox")
+KeyBox.Size = UDim2.new(0.85, 0, 0, 36)
+KeyBox.Position = UDim2.new(0.075, 0, 0.22, 0)
+KeyBox.PlaceholderText = "Paste key here..."
+KeyBox.Text = ""
+KeyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyBox.BackgroundColor3 = Color3.fromRGB(15, 23, 42)
+KeyBox.BorderSizePixel = 0
+KeyBox.Font = Enum.Font.SourceSans
+KeyBox.TextSize = 14
+KeyBox.Parent = Main
+
+local BoxCorner = Instance.new("UICorner")
+BoxCorner.CornerRadius = UDim.new(0, 6)
+BoxCorner.Parent = KeyBox
+
+local StatusLabel = Instance.new("TextLabel")
+StatusLabel.Size = UDim2.new(0.85, 0, 0, 20)
+StatusLabel.Position = UDim2.new(0.075, 0, 0.42, 0)
+StatusLabel.Text = "Status: Enter your key"
+StatusLabel.TextColor3 = Color3.fromRGB(148, 163, 184)
+StatusLabel.TextSize = 12
+StatusLabel.Font = Enum.Font.SourceSans
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Parent = Main
+
+-- Action Buttons Layout
+local VerifyBtn = Instance.new("TextButton")
+VerifyBtn.Size = UDim2.new(0.85, 0, 0, 34)
+VerifyBtn.Position = UDim2.new(0.075, 0, 0.55, 0)
+VerifyBtn.Text = "Check Key"
+VerifyBtn.BackgroundColor3 = Color3.fromRGB(79, 70, 229)
+VerifyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+VerifyBtn.Font = Enum.Font.SourceSansBold
+VerifyBtn.TextSize = 14
+VerifyBtn.Parent = Main
+
+local BtnCorner1 = Instance.new("UICorner")
+BtnCorner1.CornerRadius = UDim.new(0, 6)
+BtnCorner1.Parent = VerifyBtn
+
+local PasteBtn = Instance.new("TextButton")
+PasteBtn.Size = UDim2.new(0.41, 0, 0, 32)
+PasteBtn.Position = UDim2.new(0.075, 0, 0.74, 0)
+PasteBtn.Text = "Paste Key"
+PasteBtn.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+PasteBtn.TextColor3 = Color3.fromRGB(226, 232, 240)
+PasteBtn.Font = Enum.Font.SourceSansBold
+PasteBtn.TextSize = 13
+PasteBtn.Parent = Main
+
+local BtnCorner2 = Instance.new("UICorner")
+BtnCorner2.CornerRadius = UDim.new(0, 6)
+BtnCorner2.Parent = PasteBtn
+
+local GetKeyBtn = Instance.new("TextButton")
+GetKeyBtn.Size = UDim2.new(0.41, 0, 0, 32)
+GetKeyBtn.Position = UDim2.new(0.515, 0, 0.74, 0)
+GetKeyBtn.Text = "Get Key ($)"
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(51, 65, 85)
+GetKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+GetKeyBtn.Font = Enum.Font.SourceSansBold
+GetKeyBtn.TextSize = 13
+GetKeyBtn.Parent = Main
+
+local BtnCorner3 = Instance.new("UICorner")
+BtnCorner3.CornerRadius = UDim.new(0, 6)
+BtnCorner3.Parent = GetKeyBtn
+
+-- Event Listeners
+PasteBtn.MouseButton1Click:Connect(function()
+    local getClip = getclipboard or fromclipboard
+    if getClip then
+        KeyBox.Text = getClip()
+        StatusLabel.Text = "Pasted key from clipboard!"
+        StatusLabel.TextColor3 = Color3.fromRGB(52, 211, 153)
+    else
+        StatusLabel.Text = "Clipboard not supported on your executor."
+        StatusLabel.TextColor3 = Color3.fromRGB(248, 113, 113)
+    end
+end)
+
+GetKeyBtn.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(GET_KEY_URL)
+        StatusLabel.Text = "Key link copied to clipboard!"
+        StatusLabel.TextColor3 = Color3.fromRGB(52, 211, 153)
+    else
+        StatusLabel.Text = "Copy failed. Open site manually."
+        StatusLabel.TextColor3 = Color3.fromRGB(248, 113, 113)
+    end
+end)
+
+VerifyBtn.MouseButton1Click:Connect(function()
+    local key = KeyBox.Text
+    if key == "" then
+        StatusLabel.Text = "Please enter a key!"
+        StatusLabel.TextColor3 = Color3.fromRGB(248, 113, 113)
+        return
+    end
+
+    StatusLabel.Text = "Verifying..."
+    StatusLabel.TextColor3 = Color3.fromRGB(251, 191, 36)
+
+    local success, response = pcall(function()
+        return game:HttpGet(API_URL .. "?key=" .. key .. "&hwid=" .. UserId .. "&app_id=" .. game.PlaceId)
+    end)
+
+    if success then
+        local isJson, data = pcall(function() return HttpService:JSONDecode(response) end)
+        if isJson and data.status == "error" then
+            StatusLabel.Text = data.message or "Invalid Key!"
+            StatusLabel.TextColor3 = Color3.fromRGB(248, 113, 113)
+        else
+            StatusLabel.Text = "Key Verified! Saving..."
+            StatusLabel.TextColor3 = Color3.fromRGB(52, 211, 153)
+            
+            -- Save key locally for auto-login
+            saveKey(key)
+            
+            task.wait(1)
+            ScreenGui:Destroy()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/testonly"))()
+        end
+    else
+        StatusLabel.Text = "Server error. Try again later."
+        StatusLabel.TextColor3 = Color3.fromRGB(248, 113, 113)
+    end
+end)
