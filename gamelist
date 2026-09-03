@@ -6,6 +6,7 @@ local Games = {
   [79268393072444] = "https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/Sell%20Lemons", --Sell Lemons
   [110668201954727] = "https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/%2B1%20web%20swing%20escape", --+1 Web Swing Escape
   [95409544559668] = "https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/Military%20Army%20Tycoon", --Military Army Tycoon
+  [137233438285284] = "https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/Chicken%20Farm", -- Chicken Farm
 }
 
 return Games
