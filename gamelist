@@ -8,6 +8,8 @@ local Games = {
   [95409544559668] = "https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/Military%20Army%20Tycoon", --Military Army Tycoon
   [137233438285284] = "https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/Chicken%20Farm", -- Chicken Farm
   [103037106396302] = "https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/Troll%20Hug%20Tower", -- Troll Hug Tower
+  [123847390309161] = "https://raw.githubusercontent.com/lolnothumble/Script/refs/heads/main/Spiral%20Difficulty%20Chart%20Obby", -- Spiral Difficulty Chart Obby
+
 }
 
 return Games
