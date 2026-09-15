@@ -574,7 +574,7 @@ function Library:CreateWindow(config)
     SettingsBtn.Parent = Sidebar
     SettingsBtn.BackgroundColor3 = Theme.Sidebar
     SettingsBtn.Size = UDim2.new(1, 0, 0, 36)
-    SettingsBtn.Text = "1"
+    SettingsBtn.Text = ""
     SettingsBtn.AutoButtonColor = false
     SettingsBtn.LayoutOrder = 999999
 
@@ -609,7 +609,7 @@ function Library:CreateWindow(config)
     SettingsLabel.Position = UDim2.new(0, 34, 0, 0)
     SettingsLabel.Size = UDim2.new(1, -34, 1, 0)
     SettingsLabel.Font = Enum.Font.GothamMedium
-    SettingsLabel.Text = "Settings"
+    SettingsLabel.Text = "Settingssss"
     SettingsLabel.TextColor3 = Theme.TextSecondary
     SettingsLabel.TextSize = 11
     SettingsLabel.TextXAlignment = Enum.TextXAlignment.Left
